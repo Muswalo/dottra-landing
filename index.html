@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dottra - Student Loans for UNZA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .cobalt-blue {
+            background-color: #0047AB;
+        }
+        
+        .cobalt-blue-text {
+            color: #0047AB;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #0047AB 0%, #3a6dd3 100%);
+        }
+        
+        .app-screenshot {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .app-screenshot:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card {
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 71, 171, 0.15);
+        }
+        
+        /* Animation for the mock phone */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .floating {
+            animation: float 5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Bar -->
+    <nav class="cobalt-blue py-4 px-6 fixed w-full top-0 z-50 shadow-md">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center">
+                <span class="text-white text-2xl font-bold">dottra</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#features" class="text-white hover:text-blue-200 transition-colors">Features</a>
+                <a href="#how-it-works" class="text-white hover:text-blue-200 transition-colors">How It Works</a>
+                <a href="#download" class="text-white hover:text-blue-200 transition-colors">Download</a>
+            </div>
+            <div>
+                <a href="#download" class="bg-white cobalt-blue-text font-semibold py-2 px-6 rounded-full hover:bg-blue-50 transition-colors shadow-sm">
+                    Get The App
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg pt-32 pb-20 px-6">
+        <div class="container mx-auto flex flex-col md:flex-row items-center">
+            <div class="md:w-1/2 mb-12 md:mb-0">
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-6">Quick Loans for UNZA Students</h1>
+                <p class="text-xl text-blue-100 mb-8">Get instant access to loans up to ZMW 200 directly on your phone. Designed exclusively for University of Zambia students.</p>
+                <a href="#download" class="bg-white cobalt-blue-text font-semibold py-3 px-8 rounded-full text-lg hover:bg-blue-50 transition-colors inline-flex items-center shadow-md">
+                    Download App
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+            </div>
+            <div class="md:w-1/2 flex justify-center floating">
+                <img src="images/screenshot.png" alt="Dottra App Screenshot" class="app-screenshot max-w-xs md:max-w-sm">
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-6 bg-white">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-4 cobalt-blue-text">Why Choose Dottra?</h2>
+            <p class="text-gray-600 text-center max-w-2xl mx-auto mb-16">Designed specifically for University of Zambia students to meet your financial needs</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="feature-card bg-blue-50 p-6 rounded-xl border border-blue-100">
+                    <div class="w-12 h-12 cobalt-blue rounded-lg flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 cobalt-blue-text">Instant Loans</h3>
+                    <p class="text-gray-600">Get access to quick loans up to ZMW 200 directly on your phone within minutes.</p>
+                </div>
+                
+                <div class="feature-card bg-blue-50 p-6 rounded-xl border border-blue-100">
+                    <div class="w-12 h-12 cobalt-blue rounded-lg flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 cobalt-blue-text">Secure & Safe</h3>
+                    <p class="text-gray-600">Your data is protected with bank-level security. We prioritize your privacy.</p>
+                </div>
+                
+                <div class="feature-card bg-blue-50 p-6 rounded-xl border border-blue-100">
+                    <div class="w-12 h-12 cobalt-blue rounded-lg flex items-center justify-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 cobalt-blue-text">Quick Disbursement</h3>
+                    <p class="text-gray-600">Once approved, funds are sent directly to your mobile money account instantly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 px-6 bg-blue-50">
+        <div class="container mx-auto">
+            <h2 class="text-3xl font-bold text-center mb-4 cobalt-blue-text">How Dottra Works</h2>
+            <p class="text-gray-600 text-center max-w-2xl mx-auto mb-16">Getting a student loan has never been easier</p>
+            
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="md:w-1/4 mb-10 md:mb-0 text-center">
+                    <div class="w-20 h-20 cobalt-blue rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">1</div>
+                    <h3 class="text-xl font-semibold mb-2 cobalt-blue-text">Download & Register</h3>
+                    <p class="text-gray-600">Download the app and register with your UNZA student details</p>
+                </div>
+                
+                <div class="md:w-1/4 mb-10 md:mb-0 text-center">
+                    <div class="w-20 h-20 cobalt-blue rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">2</div>
+                    <h3 class="text-xl font-semibold mb-2 cobalt-blue-text">Apply for Loan</h3>
+                    <p class="text-gray-600">Select the amount you need (up to ZMW 200) and apply</p>
+                </div>
+                
+                <div class="md:w-1/4 text-center">
+                    <div class="w-20 h-20 cobalt-blue rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">3</div>
+                    <h3 class="text-xl font-semibold mb-2 cobalt-blue-text">Receive Funds</h3>
+                    <p class="text-gray-600">Get approved and receive funds directly to your mobile money account</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="py-20 px-6 gradient-bg">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold text-white mb-6">Get Dottra Now</h2>
+            <p class="text-blue-100 text-xl max-w-2xl mx-auto mb-10">Download our app today and get access to instant loans designed for UNZA students</p>
+            
+            <div class="max-w-md mx-auto bg-white rounded-xl shadow-lg p-8">
+                <h3 class="text-2xl font-semibold mb-6 cobalt-blue-text">Download Directly</h3>
+                <p class="text-gray-600 mb-6">Since we're not on Play Store yet, download directly from our secure server</p>
+                
+                <a href="app/app.apk" download class="cobalt-blue text-white font-semibold py-3 px-8 rounded-full text-lg w-full hover:bg-blue-700 transition-colors flex items-center justify-center">
+                    Download APK
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                
+                <p class="text-sm text-gray-500 mt-4">APK file (Android 5.0+)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="cobalt-blue py-10 px-6 text-white">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <span class="text-2xl font-bold">dottra</span>
+                    <p class="text-blue-200 mt-2">Financial support for UNZA students</p>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-blue-200 hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-blue-200 hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="text-blue-200 hover:text-white transition-colors">Contact Us</a>
+                </div>
+            </div>
+            
+            <div class="border-t border-blue-700 mt-8 pt-8 text-center text-blue-200">
+                <p>&copy; 2023 Dottra. Designed for University of Zambia students.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
