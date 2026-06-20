@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -49,7 +49,8 @@ type StaticPage = {
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 const siteRoot = resolve(__dirname, '..')
-const projectRoot = resolve(siteRoot, '..')
+const repoRoot = resolve(siteRoot, '..')
+const workspaceRoot = resolve(siteRoot, '..', '..')
 const publicDir = resolve(siteRoot, 'public')
 const pageOutputDir = siteRoot
 const siteUrl = readSiteUrl()
@@ -225,8 +226,10 @@ function readSiteUrl() {
 
 async function loadEnvFiles() {
   const envPaths = [
-    resolve(projectRoot, '.env'),
-    resolve(projectRoot, '.env.local'),
+    resolve(workspaceRoot, '.env'),
+    resolve(workspaceRoot, '.env.local'),
+    resolve(repoRoot, '.env'),
+    resolve(repoRoot, '.env.local'),
     resolve(siteRoot, '.env'),
     resolve(siteRoot, '.env.local'),
   ]
@@ -602,6 +605,19 @@ async function writePage(path: string, html: string) {
   await writeFile(resolve(outputDir, 'index.html'), html)
 }
 
+async function pageExists(path: string) {
+  try {
+    await access(resolve(pageOutputDir, path, 'index.html'))
+    return true
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
+      return false
+    }
+
+    throw error
+  }
+}
+
 async function writeTextFile(path: string, contents: string) {
   await writeFile(resolve(publicDir, path), contents)
 }
@@ -618,7 +634,17 @@ async function main() {
       console.warn(`Skipping ${page.key}: ${(error as Error).message}`)
     }
 
-    await writePage(page.path, renderPolicyPage(page, policy))
+    if (policy) {
+      await writePage(page.path, renderPolicyPage(page, policy))
+      continue
+    }
+
+    if (await pageExists(page.path)) {
+      console.warn(`Keeping existing ${page.key} page because no published policy was fetched.`)
+      continue
+    }
+
+    await writePage(page.path, renderPolicyPage(page, null))
   }
 
   for (const page of staticPages) {

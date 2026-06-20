@@ -8,8 +8,11 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+app/node_modules
 dist
+app/dist
 dist-ssr
+app/dist-ssr
 *.local
 
 # Editor directories and files
@@ -24,7 +27,7 @@ dist-ssr
 *.sw?
 
 # Unused Vite template leftovers
-src/App.css
-src/assets/hero.png
-src/assets/react.svg
-src/assets/vite.svg
+app/src/App.css
+app/src/assets/hero.png
+app/src/assets/react.svg
+app/src/assets/vite.svg

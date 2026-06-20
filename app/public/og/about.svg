@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#464bd6"/>
+  <rect x="72" y="66" width="118" height="118" rx="24" fill="#ffffff"/>
+  <text x="218" y="113" class="brand">Dottra</text>
+  <text x="218" y="151" class="site">dottra.co</text>
+  <text x="80" y="256" class="label">Company</text>
+  <text class="headline" x="78" y="338">About</text>
+<text class="headline" x="78" y="420">Dottra</text>
+  <text class="summary" x="82" y="526">The company behind support within reach.</text>
+<text class="summary" x="82" y="566">Built for salaried workers and sponsored students in Zambia.</text>
+  <style>
+    text {
+      font-family: Arial, Helvetica, sans-serif;
+      dominant-baseline: alphabetic;
+    }
+
+    .brand {
+      fill: #ffffff;
+      font-size: 42px;
+      font-weight: 800;
+    }
+
+    .site {
+      fill: #ffffff;
+      font-size: 24px;
+      font-weight: 700;
+      opacity: 0.82;
+    }
+
+    .label {
+      fill: #ffffff;
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      opacity: 0.78;
+    }
+
+    .headline {
+      fill: #ffffff;
+      font-size: 72px;
+      font-weight: 900;
+    }
+
+    .summary {
+      fill: #ffffff;
+      font-size: 28px;
+      font-weight: 700;
+      opacity: 0.86;
+    }
+  </style>
+</svg>

@@ -5,6 +5,7 @@ Public landing site for Dottra at <https://dottra.co>.
 ## Development
 
 ```bash
+cd app
 bun install
 bun run dev
 ```
@@ -12,6 +13,7 @@ bun run dev
 ## Build
 
 ```bash
+cd app
 SITE_URL=https://dottra.co bun run build
 ```
 
