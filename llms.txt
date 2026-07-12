@@ -1,0 +1,27 @@
+# Dottra
+
+> Dottra is a reusable digital credit line for eligible salaried workers and government-sponsored students in Zambia.
+
+## Product
+
+- [Product overview](https://dottra.co/product/)
+- [How it works](https://dottra.co/how-it-works/)
+- [Current pricing](https://dottra.co/pricing/)
+- [Eligibility](https://dottra.co/eligibility/)
+
+## Company and help
+
+- [About Dottra](https://dottra.co/about/)
+- [Support](https://dottra.co/support/)
+- [Contact](https://dottra.co/contact/)
+- [Terms](https://dottra.co/terms/)
+- [Privacy](https://dottra.co/privacy/)
+
+## Blog
+
+- [Introducing Dottra: your reusable credit line.](https://dottra.co/blog/introducing-dottra/): Why we built Dottra, how the reusable credit cycle works, and what customers can expect from the app.
+- [How to get out of debt: a practical plan.](https://dottra.co/blog/how-to-get-out-of-debt/): A clear way to list what you owe, protect essential costs, choose a repayment method, and measure progress.
+- [A monthly budget you can actually keep.](https://dottra.co/blog/a-monthly-budget-you-can-keep/): Build a simple salary-cycle budget around essentials, commitments, future costs, and flexible spending.
+- [Build an emergency fund one salary cycle at a time.](https://dottra.co/blog/build-an-emergency-fund/): Start with a small target, automate the habit, and keep emergency money separate from everyday spending.
+- [Plan for annual expenses before they arrive.](https://dottra.co/blog/plan-for-annual-expenses/): Turn school costs, renewals, travel, and celebrations into manageable monthly amounts.
+- [Use a credit line without losing sight of your budget.](https://dottra.co/blog/use-a-credit-line-with-a-plan/): Decide the purpose, complete cost, repayment source, and effect on next month before you confirm a draw.

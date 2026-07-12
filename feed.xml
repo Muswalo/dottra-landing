@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Dottra Blog</title>
+    <link>https://dottra.co/blog/</link>
+    <description>Dottra product updates and practical financial-management articles.</description>
+    <language>en</language>
+    <item>
+      <title>Introducing Dottra: your reusable credit line.</title>
+      <link>https://dottra.co/blog/introducing-dottra/</link>
+      <guid>https://dottra.co/blog/introducing-dottra/</guid>
+      <pubDate>Sun, 12 Jul 2026 08:00:00 GMT</pubDate>
+      <dc:creator>Emmanuel Muswalo</dc:creator>
+      <description>Why we built Dottra, how the reusable credit cycle works, and what customers can expect from the app.</description>
+    </item>
+    <item>
+      <title>How to get out of debt: a practical plan.</title>
+      <link>https://dottra.co/blog/how-to-get-out-of-debt/</link>
+      <guid>https://dottra.co/blog/how-to-get-out-of-debt/</guid>
+      <pubDate>Fri, 10 Jul 2026 08:00:00 GMT</pubDate>
+      <dc:creator>Emmanuel Muswalo</dc:creator>
+      <description>A clear way to list what you owe, protect essential costs, choose a repayment method, and measure progress.</description>
+    </item>
+    <item>
+      <title>A monthly budget you can actually keep.</title>
+      <link>https://dottra.co/blog/a-monthly-budget-you-can-keep/</link>
+      <guid>https://dottra.co/blog/a-monthly-budget-you-can-keep/</guid>
+      <pubDate>Wed, 08 Jul 2026 08:00:00 GMT</pubDate>
+      <dc:creator>Emmanuel Muswalo</dc:creator>
+      <description>Build a simple salary-cycle budget around essentials, commitments, future costs, and flexible spending.</description>
+    </item>
+    <item>
+      <title>Build an emergency fund one salary cycle at a time.</title>
+      <link>https://dottra.co/blog/build-an-emergency-fund/</link>
+      <guid>https://dottra.co/blog/build-an-emergency-fund/</guid>
+      <pubDate>Mon, 06 Jul 2026 08:00:00 GMT</pubDate>
+      <dc:creator>Emmanuel Muswalo</dc:creator>
+      <description>Start with a small target, automate the habit, and keep emergency money separate from everyday spending.</description>
+    </item>
+    <item>
+      <title>Plan for annual expenses before they arrive.</title>
+      <link>https://dottra.co/blog/plan-for-annual-expenses/</link>
+      <guid>https://dottra.co/blog/plan-for-annual-expenses/</guid>
+      <pubDate>Sat, 04 Jul 2026 08:00:00 GMT</pubDate>
+      <dc:creator>Emmanuel Muswalo</dc:creator>
+      <description>Turn school costs, renewals, travel, and celebrations into manageable monthly amounts.</description>
+    </item>
+    <item>
+      <title>Use a credit line without losing sight of your budget.</title>
+      <link>https://dottra.co/blog/use-a-credit-line-with-a-plan/</link>
+      <guid>https://dottra.co/blog/use-a-credit-line-with-a-plan/</guid>
+      <pubDate>Thu, 02 Jul 2026 08:00:00 GMT</pubDate>
+      <dc:creator>Emmanuel Muswalo</dc:creator>
+      <description>Decide the purpose, complete cost, repayment source, and effect on next month before you confirm a draw.</description>
+    </item>
+  </channel>
+</rss>
