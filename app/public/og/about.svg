@@ -6,8 +6,8 @@
   <text x="80" y="256" class="label">Company</text>
   <text class="headline" x="78" y="338">About</text>
 <text class="headline" x="78" y="420">Dottra</text>
-  <text class="summary" x="82" y="526">The company behind support within reach.</text>
-<text class="summary" x="82" y="566">Built for salaried workers and sponsored students in Zambia.</text>
+  <text class="summary" x="82" y="526">The company building reusable digital credit.</text>
+<text class="summary" x="82" y="566">Designed for salary and sponsorship cycles in Zambia.</text>
   <style>
     text {
       font-family: Arial, Helvetica, sans-serif;

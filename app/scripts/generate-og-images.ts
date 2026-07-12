@@ -24,8 +24,8 @@ const pages: OgPage[] = [
   {
     slug: 'home',
     label: 'Dottra',
-    headline: ['There when money', 'runs thin.'],
-    summary: ['Download on Google Play.', 'Support within reach before salary or sponsorship lands.'],
+    headline: ['Your reusable', 'credit line.'],
+    summary: ['Built for eligible customers in Zambia.', 'See the complete cost before every draw.'],
   },
   {
     slug: 'privacy',
@@ -55,7 +55,7 @@ const pages: OgPage[] = [
     slug: 'about',
     label: 'Company',
     headline: ['About', 'Dottra'],
-    summary: ['The company behind support within reach.', 'Built for salaried workers and sponsored students in Zambia.'],
+    summary: ['The company building reusable digital credit.', 'Designed for salary and sponsorship cycles in Zambia.'],
   },
   {
     slug: 'support',

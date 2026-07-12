@@ -2,11 +2,21 @@ import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { createElement } from 'react'
-import { renderToStaticMarkup } from 'react-dom/server'
-import { FaLinkedinIn, FaWhatsapp, FaXTwitter } from 'react-icons/fa6'
-import type { IconType } from 'react-icons'
 import type { Database, Json } from '../src/types/database.types'
+import {
+  blogPosts,
+  fixedChargeRate,
+  googlePlayUrl,
+  packageTermDays,
+  processingFeeRate,
+  pricingReviewedAt,
+  salariedPackageAmounts,
+  standardPages,
+  studentPackageAmounts,
+  type BlogPost,
+  type PageLink,
+  type StandardPage,
+} from './site-content'
 
 type PolicyKey = Database['public']['Enums']['policy_document_key']
 type PublishedPolicyRow = Database['public']['Views']['published_policies_v']['Row']
@@ -29,21 +39,13 @@ type PublishedPolicy = {
   sections: PublishedPolicySection[]
 }
 
-type PageLink = {
-  label: string
-  href: string
-}
-
-type StaticPage = {
-  path: string
+type HeadInput = {
   title: string
-  eyebrow: string
-  summary: string
-  sections: Array<{
-    title: string
-    body: string[]
-  }>
-  actions?: PageLink[]
+  description: string
+  path: string
+  type?: 'website' | 'article'
+  publishedAt?: string
+  structuredData?: Record<string, unknown> | Array<Record<string, unknown>>
 }
 
 const __filename = fileURLToPath(import.meta.url)
@@ -54,29 +56,6 @@ const workspaceRoot = resolve(siteRoot, '..', '..')
 const publicDir = resolve(siteRoot, 'public')
 const pageOutputDir = siteRoot
 const siteUrl = readSiteUrl()
-const shareText = encodeURIComponent('Dottra is there when money runs thin.')
-const shareUrl = encodeURIComponent(siteUrl)
-const socialLinks: Array<{
-  label: string
-  href: string
-  icon: IconType
-}> = [
-  {
-    label: 'Share on X',
-    href: `https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`,
-    icon: FaXTwitter,
-  },
-  {
-    label: 'Share on WhatsApp',
-    href: `https://wa.me/?text=${shareText}%20${shareUrl}`,
-    icon: FaWhatsapp,
-  },
-  {
-    label: 'Share on LinkedIn',
-    href: `https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}`,
-    icon: FaLinkedinIn,
-  },
-]
 
 const policyPages: Array<{
   key: PolicyKey
@@ -94,7 +73,7 @@ const policyPages: Array<{
     key: 'terms',
     path: 'terms',
     fallbackTitle: 'Terms of Service',
-    fallbackSummary: 'The latest terms of service have not been published yet.',
+    fallbackSummary: 'The latest terms of service has not been published yet.',
   },
   {
     key: 'cookies',
@@ -107,111 +86,6 @@ const policyPages: Array<{
     path: 'licences',
     fallbackTitle: 'Licences',
     fallbackSummary: 'The latest licence information has not been published yet.',
-  },
-]
-
-const staticPages: StaticPage[] = [
-  {
-    path: 'about',
-    title: 'About Dottra',
-    eyebrow: 'Company',
-    summary:
-      'Dottra Lending Services Limited builds practical financial access tools for salaried workers and government-sponsored students in Zambia.',
-    sections: [
-      {
-        title: 'The company behind the app',
-        body: [
-          'Dottra is built around a simple idea: when money runs thin before salary or sponsorship lands, people should have a clear place to turn.',
-          'The product focuses on transparency, account visibility, and mobile access, so users can see what is available and understand what comes next.',
-        ],
-      },
-      {
-        title: 'Who Dottra serves',
-        body: [
-          'Dottra is designed for salaried workers and government-sponsored students in Zambia whose income or sponsorship arrives in cycles.',
-          'The app helps users manage tight moments between those cycles without having to start from zero every time.',
-        ],
-      },
-    ],
-    actions: [
-      { label: 'Download the app', href: 'https://play.google.com/store/apps/details?id=com.dottra.app' },
-      { label: 'Get support', href: '/support/' },
-    ],
-  },
-  {
-    path: 'support',
-    title: 'Dottra Support',
-    eyebrow: 'Support',
-    summary:
-      'Get help with your Dottra account, app access, verification, activity, or anything that does not look right.',
-    sections: [
-      {
-        title: 'Start in the app when you can',
-        body: [
-          'For account-specific help, open Dottra and use the support option from your account. That is the best route because it connects your request to the account you are asking about.',
-          'Use app support for questions about your balance, account activity, verification, access, or anything that does not look right.',
-        ],
-      },
-      {
-        title: 'If you cannot access the app',
-        body: [
-          'Email support@dottra.co with a short description of the issue and the phone number or email address connected to your Dottra account.',
-          'Do not send your password, transaction PIN, one-time code, card details, or full identity documents by email.',
-        ],
-      },
-      {
-        title: 'What to include',
-        body: [
-          'Tell us what you were trying to do, what happened, and when it happened. Screenshots can help if they do not reveal private codes or sensitive documents.',
-          'If the issue is urgent because you believe your account is being accessed by someone else, say that clearly at the start of the message.',
-        ],
-      },
-      {
-        title: 'Stay safe',
-        body: [
-          'Dottra will not ask you to share your password, transaction PIN, or one-time code by email, social media, or phone call.',
-          'Only use Dottra through the official app and the links on this website.',
-        ],
-      },
-    ],
-    actions: [
-      { label: 'Email support', href: 'mailto:support@dottra.co' },
-      { label: 'Download the app', href: 'https://play.google.com/store/apps/details?id=com.dottra.app' },
-    ],
-  },
-  {
-    path: 'contact',
-    title: 'Contact Dottra',
-    eyebrow: 'Company contact',
-    summary:
-      'For company, legal, partnership, and general enquiries about Dottra Lending Services Limited.',
-    sections: [
-      {
-        title: 'Company enquiries',
-        body: [
-          'For business, partnership, media, legal, or general company enquiries, email hello@dottra.co.',
-          'If your question is about your personal Dottra account, use the support page or the support option inside the app instead.',
-        ],
-      },
-      {
-        title: 'Account support goes through support',
-        body: [
-          'The contact inbox is not the fastest place for account-specific help. For account access, verification, balance, activity, or security issues, start from the support page.',
-          'Never include your password, transaction PIN, one-time code, or full identity documents in a general contact email.',
-        ],
-      },
-      {
-        title: 'Company details',
-        body: [
-          'Dottra is operated by Dottra Lending Services Limited in Zambia.',
-          'The Dottra app is currently available on Google Play. Dottra is not yet available on the Apple App Store.',
-        ],
-      },
-    ],
-    actions: [
-      { label: 'Email Dottra', href: 'mailto:hello@dottra.co' },
-      { label: 'Get account support', href: '/support/' },
-    ],
   },
 ]
 
@@ -343,7 +217,9 @@ function readStringArray(value: unknown, fieldName: string): string[] {
     throw new Error(`Published policy ${fieldName} is malformed`)
   }
 
-  const values = value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0)
+  const values = value.filter(
+    (item): item is string => typeof item === 'string' && item.trim().length > 0,
+  )
 
   if (values.length !== value.length || values.length === 0) {
     throw new Error(`Published policy ${fieldName} is malformed`)
@@ -365,7 +241,9 @@ function mapPublishedPolicySection(value: Json): PublishedPolicySection {
   }
 }
 
-function mapPublishedPolicySections(sections: PublishedPolicyRow['sections']): PublishedPolicySection[] {
+function mapPublishedPolicySections(
+  sections: PublishedPolicyRow['sections'],
+): PublishedPolicySection[] {
   if (!Array.isArray(sections)) {
     throw new Error('Published policy sections are unavailable')
   }
@@ -381,7 +259,10 @@ function mapPublishedPolicyRow(row: PublishedPolicyRow): PublishedPolicy {
     title: readRequiredString(row.title, 'title'),
     eyebrow: readRequiredString(row.eyebrow, 'eyebrow'),
     summary: readRequiredString(row.summary, 'summary'),
-    updatedAt: readRequiredString(row.updated_at ?? row.published_at ?? row.effective_at, 'updated timestamp'),
+    updatedAt: readRequiredString(
+      row.updated_at ?? row.published_at ?? row.effective_at,
+      'updated timestamp',
+    ),
     effectiveAt: readOptionalString(row.effective_at),
     footerNote: readOptionalString(row.footer_note),
     sections: mapPublishedPolicySections(row.sections),
@@ -396,10 +277,17 @@ function formatDate(value: string): string {
   }
 
   return new Intl.DateTimeFormat('en', {
-    month: 'long',
     day: 'numeric',
+    month: 'long',
     year: 'numeric',
   }).format(date)
+}
+
+function formatKwacha(value: number): string {
+  return `K${new Intl.NumberFormat('en-ZM', {
+    minimumFractionDigits: Number.isInteger(value) ? 0 : 2,
+    maximumFractionDigits: 2,
+  }).format(value)}`
 }
 
 function escapeHtml(value: string): string {
@@ -411,18 +299,47 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#39;')
 }
 
-function absoluteUrl(path: string): string {
-  return `${siteUrl}/${path.replace(/^\/+|\/+$/g, '')}/`
+function escapeXml(value: string): string {
+  return escapeHtml(value)
 }
 
-function renderHead(input: {
-  title: string
-  description: string
-  path: string
-}) {
+function normalizeHtml(value: string): string {
+  return `${value.replace(/[\t ]+$/gm, '').trimEnd()}\n`
+}
+
+function absoluteUrl(path = ''): string {
+  const cleanPath = path.replace(/^\/+|\/+$/g, '')
+  return cleanPath ? `${siteUrl}/${cleanPath}/` : `${siteUrl}/`
+}
+
+function renderStructuredData(data: HeadInput['structuredData']): string {
+  if (!data) {
+    return ''
+  }
+
+  const json = JSON.stringify(data).replace(/</g, '\\u003c')
+  return `    <script type="application/ld+json">${json}</script>\n`
+}
+
+function ogImageForPath(path: string): string {
+  const firstSegment = path.replace(/^\/+|\/+$/g, '').split('/')[0]
+  const dedicatedImages = new Set([
+    'about',
+    'contact',
+    'cookies',
+    'licences',
+    'privacy',
+    'support',
+    'terms',
+  ])
+  const imageName = dedicatedImages.has(firstSegment) ? firstSegment : 'home'
+  return `${siteUrl}/og/${imageName}.png`
+}
+
+function renderHead(input: HeadInput) {
   const pageUrl = absoluteUrl(input.path)
-  const ogImage = `${siteUrl}/og/${input.path.replace(/^\/+|\/+$/g, '')}.png`
-  const title = `${input.title} | Dottra`
+  const ogImage = ogImageForPath(input.path)
+  const title = input.title.includes('Dottra') ? input.title : `${input.title} | Dottra`
 
   return `<!doctype html>
 <html lang="en">
@@ -432,187 +349,561 @@ function renderHead(input: {
     <meta name="description" content="${escapeHtml(input.description)}" />
     <link rel="canonical" href="${pageUrl}" />
     <link rel="icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
-    <link rel="apple-touch-icon" href="/apple-icon.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon-180x180.png" />
     <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#ffffff" />
-    <meta name="msapplication-config" content="/browserconfig.xml" />
-    <meta name="msapplication-TileColor" content="#ffffff" />
-    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
+    <link rel="alternate" type="application/rss+xml" title="Dottra Blog" href="/feed.xml" />
     <link rel="stylesheet" href="/static-page.css" />
-    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta property="og:type" content="${input.type ?? 'website'}" />
     <meta property="og:site_name" content="Dottra" />
     <meta property="og:title" content="${escapeHtml(title)}" />
     <meta property="og:description" content="${escapeHtml(input.description)}" />
     <meta property="og:url" content="${pageUrl}" />
     <meta property="og:image" content="${ogImage}" />
-    <meta property="og:image:secure_url" content="${ogImage}" />
-    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="${escapeHtml(title)}" />
+    ${input.publishedAt ? `<meta property="article:published_time" content="${escapeHtml(input.publishedAt)}" />` : ''}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${escapeHtml(title)}" />
     <meta name="twitter:description" content="${escapeHtml(input.description)}" />
     <meta name="twitter:image" content="${ogImage}" />
-    <title>${escapeHtml(title)}</title>
+${renderStructuredData(input.structuredData)}    <title>${escapeHtml(title)}</title>
   </head>
   <body>`
 }
 
 function renderHeader() {
-  return `<main class="page-shell">
-      <header class="site-header">
-        <a class="brand" href="/">
-          <img src="/dottra-symbol-light.png" alt="" />
+  return `
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="Dottra home">
+          <img src="/dottra-symbol-light.png" alt="" width="34" height="24" />
           <span>Dottra</span>
         </a>
-      </header>`
-}
-
-function renderIcon(icon: IconType): string {
-  return renderToStaticMarkup(createElement(icon, { 'aria-hidden': true }))
-}
-
-function renderSocialLinks(): string {
-  return socialLinks
-    .map((item) => `<a href="${escapeHtml(item.href)}" target="_blank" rel="noreferrer" aria-label="${escapeHtml(item.label)}">${renderIcon(item.icon)}</a>`)
-    .join('')
+        <nav class="site-nav" aria-label="Main navigation">
+          <a href="/product/">Product</a>
+          <a href="/how-it-works/">How it works</a>
+          <a href="/pricing/">Pricing</a>
+          <a href="/eligibility/">Eligibility</a>
+          <a href="/blog/">Blog</a>
+          <a href="/support/">Help</a>
+        </nav>
+        <a class="header-action" href="${googlePlayUrl}" target="_blank" rel="noreferrer">Get the app</a>
+      </div>
+    </header>`
 }
 
 function renderFooter() {
-  return `    </main>
+  return `
     <footer class="site-footer">
       <div class="footer-inner">
         <div class="footer-brand-block">
-          <a class="footer-brand" href="/">
-            <img src="/dottra-symbol-dark.png" alt="" />
+          <a class="footer-brand" href="/" aria-label="Dottra home">
+            <img src="/dottra-symbol-dark.png" alt="" width="34" height="24" />
             <span>Dottra</span>
           </a>
-          <p class="footer-copy">Support within reach before salary or sponsorship lands.</p>
+          <p>A reusable digital credit line built for Zambia.</p>
         </div>
         <div class="footer-column">
-          <h2>Download</h2>
-          <div class="footer-store-links">
-            <a href="https://play.google.com/store/apps/details?id=com.dottra.app">Google Play</a>
-            <span>App Store coming soon</span>
-          </div>
-          <span>Not yet available on the Apple App Store.</span>
+          <h2>Product</h2>
+          <a href="/product/">Overview</a>
+          <a href="/how-it-works/">How it works</a>
+          <a href="/pricing/">Pricing</a>
+          <a href="/eligibility/">Eligibility</a>
         </div>
         <div class="footer-column">
-          <h2>Share</h2>
-          <div class="social-links" aria-label="Share Dottra">
-            ${renderSocialLinks()}
-          </div>
+          <h2>Company</h2>
+          <a href="/about/">About</a>
+          <a href="/blog/">Blog</a>
+          <a href="/contact/">Contact</a>
         </div>
         <div class="footer-column">
-          <h2>Legal</h2>
+          <h2>Help and legal</h2>
+          <a href="/support/">Support</a>
           <a href="/terms/">Terms</a>
           <a href="/privacy/">Privacy</a>
           <a href="/cookies/">Cookies</a>
         </div>
         <div class="footer-column">
-          <h2>Company</h2>
-          <a href="/about/">About</a>
-          <a href="/support/">Support</a>
-          <a href="/contact/">Contact</a>
-          <span>Dottra Lending Services Limited</span>
-          <span>Zambia</span>
+          <h2>Get Dottra</h2>
+          <a class="store-badge-link footer-store-badge" href="${googlePlayUrl}" target="_blank" rel="noreferrer" aria-label="Get Dottra on Google Play"><img src="/google-play-badge.png" alt="Get it on Google Play" width="646" height="250" /></a>
+          <span>App Store coming soon</span>
+          <a href="mailto:support@dottra.co">support@dottra.co</a>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>&copy; 2026 Dottra Lending Services Limited.</span>
+        <span>&copy; 2026 Dottra Lending Services Limited. Zambia.</span>
+        <span>PACRA 120251028871</span>
       </div>
     </footer>
   </body>
 </html>`
 }
 
+function renderActions(actions?: PageLink[]) {
+  if (!actions?.length) {
+    return ''
+  }
+
+  return `<div class="action-row">${actions
+    .map(
+      (action, index) => {
+        if (action.href === googlePlayUrl) {
+          return `<a class="store-badge-link store-badge-action" href="${googlePlayUrl}" target="_blank" rel="noreferrer" aria-label="Get Dottra on Google Play"><img src="/google-play-badge.png" alt="Get it on Google Play" width="646" height="250" /></a>`
+        }
+
+        return `<a class="button${index > 0 ? ' button-secondary' : ''}" href="${escapeHtml(action.href)}">${escapeHtml(action.label)}</a>`
+      },
+    )
+    .join('')}</div>`
+}
+
+function renderStandardPage(page: StandardPage) {
+  const sections = page.sections
+    .map(
+      (section) => `<section class="content-section">
+          <div class="content-heading"><h2>${escapeHtml(section.title)}</h2></div>
+          <div class="prose">
+            ${section.paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join('\n            ')}
+            ${
+              section.items?.length
+                ? `<ul>${section.items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
+                : ''
+            }
+          </div>
+        </section>`,
+    )
+    .join('\n')
+
+  return `${renderHead({
+    title: page.title,
+    description: page.summary,
+    path: page.path,
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: page.title,
+      description: page.summary,
+      url: absoluteUrl(page.path),
+      isPartOf: { '@type': 'WebSite', name: 'Dottra', url: siteUrl },
+    },
+  })}
+${renderHeader()}
+    <main class="page-main">
+      <section class="page-hero">
+        <p class="eyebrow">${escapeHtml(page.eyebrow)}</p>
+        <h1>${escapeHtml(page.title)}</h1>
+        <p class="summary">${escapeHtml(page.summary)}</p>
+        ${renderActions(page.actions)}
+      </section>
+      <div class="content-stack">
+        ${sections}
+      </div>
+    </main>
+${renderFooter()}`
+}
+
 function renderPolicyPage(
   page: (typeof policyPages)[number],
   policy: PublishedPolicy | null,
 ) {
-  const title = policy?.title ?? page.fallbackTitle
-  const summary = policy?.summary ?? page.fallbackSummary
-  const eyebrow = policy?.eyebrow ?? 'Policy'
-  const updatedAt = policy ? formatDate(policy.updatedAt) : null
-  const sections = policy?.sections.map((section) => ({
-    title: section.title,
-    body: section.body,
-  })) ?? [
-    {
-      title: 'Policy unavailable',
-      body: [
-        'This policy has not been published yet. Once a published version exists in Dottra policy records, this static page will be generated with that content.',
-      ],
-    },
-  ]
-
-  return renderPage({
+  const standardPage: StandardPage = {
     path: page.path,
-    title,
-    eyebrow,
-    summary,
-    updatedAt,
-    sections,
-    footerNote: policy?.footerNote ?? null,
-  })
+    title: policy?.title ?? page.fallbackTitle,
+    eyebrow: policy?.eyebrow ?? 'Policy',
+    summary: policy?.summary ?? page.fallbackSummary,
+    sections:
+      policy?.sections.map((section) => ({
+        title: section.title,
+        paragraphs: section.body,
+      })) ?? [
+        {
+          title: 'Policy unavailable',
+          paragraphs: [
+            'This policy has not been published yet. The current version will appear here when it is available.',
+          ],
+        },
+      ],
+  }
+  const updated = policy ? formatDate(policy.updatedAt) : null
+  const rendered = renderStandardPage(standardPage)
+
+  if (!updated && !policy?.footerNote) {
+    return rendered
+  }
+
+  const note = [updated ? `Last updated ${updated}.` : '', policy?.footerNote ?? '']
+    .filter(Boolean)
+    .join(' ')
+
+  return rendered.replace(
+    '<div class="content-stack">',
+    `<p class="document-meta">${escapeHtml(note)}</p><div class="content-stack">`,
+  )
 }
 
-function renderPage(input: {
-  path: string
-  title: string
-  eyebrow: string
-  summary: string
-  updatedAt?: string | null
-  sections: Array<{ title: string; body: string[] }>
-  footerNote?: string | null
-  actions?: PageLink[]
-}) {
-  const sectionsHtml = input.sections
-    .map((section) => `<section class="section">
-          <h2>${escapeHtml(section.title)}</h2>
-          <div class="copy">
-            ${section.body.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join('\n            ')}
+function renderHomePage() {
+  const latestPosts = blogPosts.slice(0, 3)
+  const articles = latestPosts
+    .map(
+      (post) => `<article class="post-row">
+          <div class="post-meta"><span>${escapeHtml(post.category)}</span><time datetime="${post.publishedAt}">${escapeHtml(post.displayDate)}</time></div>
+          <div>
+            <h3><a href="/blog/${post.slug}/">${escapeHtml(post.title)}</a></h3>
+            <p>${escapeHtml(post.summary)}</p>
           </div>
-        </section>`)
+          <a class="text-link" href="/blog/${post.slug}/" aria-label="Read ${escapeHtml(post.title)}">Read article</a>
+        </article>`,
+    )
     .join('\n')
-  const actionsHtml = input.actions?.length
-    ? `<div class="action-row">${input.actions
-        .map((action, index) => `<a class="button${index > 0 ? ' button-secondary' : ''}" href="${escapeHtml(action.href)}">${escapeHtml(action.label)}</a>`)
-        .join('')}</div>`
-    : ''
-  const footerNoteHtml = input.footerNote
-    ? `<section class="section"><div class="copy"><p>${escapeHtml(input.footerNote)}</p></div></section>`
-    : ''
 
   return `${renderHead({
-    title: input.title,
-    description: input.summary,
-    path: input.path,
+    title: 'Dottra | Your reusable credit line',
+    description:
+      'A reusable digital credit line for eligible salaried workers and government-sponsored students in Zambia.',
+    path: '',
+    structuredData: [
+      {
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'Dottra',
+        legalName: 'Dottra Lending Services Limited',
+        url: siteUrl,
+        email: 'hello@dottra.co',
+        address: {
+          '@type': 'PostalAddress',
+          streetAddress: 'Chingwere 31651, Chunga East',
+          addressLocality: 'Lusaka',
+          postalCode: '10101',
+          addressCountry: 'ZM',
+        },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'Dottra',
+        url: siteUrl,
+      },
+    ],
   })}
-    ${renderHeader()}
-      <section class="hero">
-        <p class="eyebrow">${escapeHtml(input.eyebrow)}</p>
-        <h1>${escapeHtml(input.title)}</h1>
-        <p class="summary">${escapeHtml(input.summary)}</p>
-        ${input.updatedAt ? `<p class="updated">Last updated ${escapeHtml(input.updatedAt)}</p>` : ''}
-        ${actionsHtml}
+${renderHeader()}
+    <main>
+      <section class="home-hero page-width">
+        <div class="home-hero-copy">
+          <p class="eyebrow">Now on Google Play</p>
+          <h1>Your reusable credit line.</h1>
+          <p class="home-lede">Built for eligible salaried workers and government-sponsored students in Zambia. See the complete cost before every draw, repay, and make credit available again.</p>
+          <div class="action-row">
+            <a class="store-badge-link" href="${googlePlayUrl}" target="_blank" rel="noreferrer" aria-label="Get Dottra on Google Play"><img src="/google-play-badge.png" alt="Get it on Google Play" width="646" height="250" /></a>
+            <a class="button button-secondary" href="/how-it-works/">See how it works</a>
+          </div>
+          <p class="hero-note">Approval and individual limits are subject to verification and affordability review.</p>
+        </div>
+        <figure class="product-visual">
+          <img src="/app-screenshot.png" alt="Dottra account screen showing available credit and recent account activity." width="1046" height="1860" />
+        </figure>
       </section>
-      <div class="content">
-        ${sectionsHtml}
-        ${footerNoteHtml}
-      </div>
+
+      <section class="cycle-band" aria-labelledby="cycle-title">
+        <div class="cycle-inner page-width">
+          <div>
+            <p class="section-label">The Dottra account</p>
+            <h2 id="cycle-title">Credit that becomes available again.</h2>
+          </div>
+          <ol class="credit-cycle">
+            <li><span>01</span><strong>Available credit</strong></li>
+            <li><span>02</span><strong>Draw</strong></li>
+            <li><span>03</span><strong>Repay</strong></li>
+            <li><span>04</span><strong>Available again</strong></li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="home-section page-width" aria-labelledby="essentials-title">
+        <div class="section-intro">
+          <p class="section-label">The essentials</p>
+          <h2 id="essentials-title">Straightforward from the start.</h2>
+        </div>
+        <div class="feature-list">
+          <article>
+            <p class="feature-number">01</p>
+            <h3>See the full cost first</h3>
+            <p>The amount received, Processing Fee, one-time Fixed Charge, repayment date, and total are shown before confirmation.</p>
+          </article>
+          <article>
+            <p class="feature-number">02</p>
+            <h3>No fee to join</h3>
+            <p>There is no registration, membership, or subscription fee. Current package pricing is published on its own page.</p>
+            <a class="text-link" href="/pricing/">View pricing</a>
+          </article>
+          <article>
+            <p class="feature-number">03</p>
+            <h3>Manage it in one app</h3>
+            <p>View available credit, package terms, account activity, the scheduled repayment, and support from your Dottra account.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="link-section page-width" aria-label="Learn about Dottra">
+        <a href="/product/"><span>Product</span><strong>Understand the reusable credit line</strong></a>
+        <a href="/how-it-works/"><span>Process</span><strong>Follow every step from verification to repayment</strong></a>
+        <a href="/eligibility/"><span>Eligibility</span><strong>Check the current customer requirements</strong></a>
+      </section>
+
+      <section class="home-section page-width" aria-labelledby="latest-title">
+        <div class="section-intro section-intro-row">
+          <div>
+            <p class="section-label">From the blog</p>
+            <h2 id="latest-title">Latest from Dottra.</h2>
+          </div>
+          <a class="text-link" href="/blog/">View all articles</a>
+        </div>
+        <div class="post-list">${articles}</div>
+      </section>
+
+      <section class="closing-band">
+        <div class="closing-inner page-width">
+          <div>
+            <p class="section-label">Dottra for Android</p>
+            <h2>Keep your credit line within reach.</h2>
+          </div>
+          <a class="store-badge-link store-badge-on-dark" href="${googlePlayUrl}" target="_blank" rel="noreferrer" aria-label="Get Dottra on Google Play"><img src="/google-play-badge.png" alt="Get it on Google Play" width="646" height="250" /></a>
+        </div>
+      </section>
+    </main>
+${renderFooter()}`
+}
+
+function renderPricingPage() {
+  const studentAmounts = new Set(studentPackageAmounts)
+  const rows = salariedPackageAmounts
+    .map((amount) => {
+      const processingFee = amount * processingFeeRate
+      const amountReceived = amount - processingFee
+      const fixedCharge = amount * fixedChargeRate
+      const totalToRepay = amount + fixedCharge
+      const audience = studentAmounts.has(amount) ? 'Salaried and student' : 'Salaried'
+
+      return `<tr>
+            <th scope="row">${formatKwacha(amount)}</th>
+            <td>${formatKwacha(processingFee)}</td>
+            <td>${formatKwacha(amountReceived)}</td>
+            <td>${formatKwacha(fixedCharge)}</td>
+            <td><strong>${formatKwacha(totalToRepay)}</strong></td>
+            <td>${packageTermDays} days</td>
+            <td>${audience}</td>
+          </tr>`
+    })
+    .join('\n')
+
+  return `${renderHead({
+    title: 'Current pricing',
+    description:
+      'Dottra package amounts, Processing Fees, one-time Fixed Charges, amounts received, and totals to repay.',
+    path: 'pricing',
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@type': 'WebPage',
+      name: 'Dottra current pricing',
+      description: 'Current Dottra package pricing and repayment terms.',
+      url: absoluteUrl('pricing'),
+    },
+  })}
+${renderHeader()}
+    <main class="page-main pricing-page">
+      <section class="page-hero">
+        <p class="eyebrow">Pricing</p>
+        <h1>Current Dottra pricing.</h1>
+        <p class="summary">One rate structure across the current package catalogue, with every figure shown before you confirm in the app.</p>
+        <p class="document-meta">Catalogue reviewed ${pricingReviewedAt}. The in-app confirmation is the final source of terms for each draw.</p>
+      </section>
+
+      <section class="rate-summary" aria-label="Current rate summary">
+        <div><span>Processing Fee</span><strong>5%</strong><p>Deducted before the amount is sent.</p></div>
+        <div><span>Fixed Charge</span><strong>20%</strong><p>Set once when the draw completes.</p></div>
+        <div><span>Term</span><strong>30 days</strong><p>Due on the date shown in the app.</p></div>
+      </section>
+
+      <section class="pricing-explanation content-section">
+        <div class="content-heading"><h2>How the figures work.</h2></div>
+        <div class="prose">
+          <p>The 5% Processing Fee is deducted from the selected amount before payout. The 20% Fixed Charge is added to the selected amount to calculate the total to repay.</p>
+          <p>For example, select K500, receive K475 in your registered mobile-money wallet, and repay K600 after 30 days.</p>
+          <p>The Fixed Charge does not grow day by day or compound. There is no registration, membership, or subscription fee.</p>
+        </div>
+      </section>
+
+      <section class="pricing-table-section" aria-labelledby="table-title">
+        <div class="table-heading">
+          <div><p class="section-label">Package table</p><h2 id="table-title">Every current package.</h2></div>
+          <p>Salaried: K50 to K3,000. Students: K75 to K400.</p>
+        </div>
+        <div class="table-scroll" tabindex="0">
+          <table>
+            <caption>Current Dottra credit packages and complete pricing</caption>
+            <thead>
+              <tr>
+                <th scope="col">Selected amount</th>
+                <th scope="col">Processing Fee</th>
+                <th scope="col">Amount received</th>
+                <th scope="col">Fixed Charge</th>
+                <th scope="col">Total to repay</th>
+                <th scope="col">Term</th>
+                <th scope="col">Available to</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="pricing-notes content-section">
+        <div class="content-heading"><h2>Important pricing notes.</h2></div>
+        <div class="prose">
+          <ul>
+            <li>Your approved limit determines which packages are available in your account.</li>
+            <li>Every draw is subject to current eligibility, account controls, package availability, and provider processing.</li>
+            <li>Rates and packages can change for future draws. A completed draw keeps the terms accepted at confirmation.</li>
+            <li>Repayment is scheduled through the registered bank mandate on the date displayed in the app.</li>
+          </ul>
+          ${renderActions([
+            { label: 'See how it works', href: '/how-it-works/' },
+            { label: 'Check eligibility', href: '/eligibility/' },
+          ])}
+        </div>
+      </section>
+    </main>
+${renderFooter()}`
+}
+
+function renderBlogIndex() {
+  const posts = blogPosts
+    .map(
+      (post) => `<article class="blog-index-row">
+          <div class="post-meta"><span>${escapeHtml(post.category)}</span><time datetime="${post.publishedAt}">${escapeHtml(post.displayDate)}</time></div>
+          <div>
+            <h2><a href="/blog/${post.slug}/">${escapeHtml(post.title)}</a></h2>
+            <p>${escapeHtml(post.summary)}</p>
+            <p class="byline">By Emmanuel Muswalo &middot; ${escapeHtml(post.readingTime)}</p>
+          </div>
+          <a class="text-link" href="/blog/${post.slug}/" aria-label="Read ${escapeHtml(post.title)}">Read article</a>
+        </article>`,
+    )
+    .join('\n')
+
+  return `${renderHead({
+    title: 'Blog',
+    description:
+      'Dottra product updates and practical writing about budgeting, saving, credit, and financial management.',
+    path: 'blog',
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@type': 'Blog',
+      name: 'Dottra Blog',
+      description: 'Product updates and practical financial-management articles from Dottra.',
+      url: absoluteUrl('blog'),
+      publisher: { '@type': 'Organization', name: 'Dottra', url: siteUrl },
+    },
+  })}
+${renderHeader()}
+    <main class="page-main blog-page">
+      <section class="page-hero">
+        <p class="eyebrow">Blog</p>
+        <h1>Useful thinking about money.</h1>
+        <p class="summary">Product updates from Dottra and practical financial-management guides written for everyday decisions.</p>
+      </section>
+      <div class="blog-index">${posts}</div>
+    </main>
+${renderFooter()}`
+}
+
+function renderBlogPost(post: BlogPost) {
+  const articleBody = post.sections
+    .map(
+      (section) => `<section>
+          <h2>${escapeHtml(section.title)}</h2>
+          ${section.paragraphs.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join('\n          ')}
+          ${
+            section.items?.length
+              ? `<ul>${section.items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>`
+              : ''
+          }
+        </section>`,
+    )
+    .join('\n')
+  const relatedPosts = blogPosts
+    .filter((candidate) => candidate.slug !== post.slug)
+    .slice(0, 3)
+    .map(
+      (candidate) => `<li><a href="/blog/${candidate.slug}/"><span>${escapeHtml(candidate.category)}</span><strong>${escapeHtml(candidate.title)}</strong></a></li>`,
+    )
+    .join('')
+  const articleUrl = absoluteUrl(`blog/${post.slug}`)
+  const encodedArticleUrl = encodeURIComponent(articleUrl)
+  const encodedShareText = encodeURIComponent(post.title)
+  const shareLinks = `<nav class="article-share" aria-label="Share this article">
+            <span>Share</span>
+            <a href="https://wa.me/?text=${encodedShareText}%20${encodedArticleUrl}" target="_blank" rel="noreferrer">WhatsApp</a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodedArticleUrl}" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a href="https://twitter.com/intent/tweet?text=${encodedShareText}&url=${encodedArticleUrl}" target="_blank" rel="noreferrer">X</a>
+          </nav>`
+  const hasProductVisual = post.slug === 'introducing-dottra'
+
+  return `${renderHead({
+    title: post.title,
+    description: post.summary,
+    path: `blog/${post.slug}`,
+    type: 'article',
+    publishedAt: post.publishedAt,
+    structuredData: {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: post.title,
+      description: post.summary,
+      datePublished: post.publishedAt,
+      dateModified: post.publishedAt,
+      mainEntityOfPage: absoluteUrl(`blog/${post.slug}`),
+      author: { '@type': 'Person', name: 'Emmanuel Muswalo' },
+      publisher: { '@type': 'Organization', name: 'Dottra', url: siteUrl },
+    },
+  })}
+${renderHeader()}
+    <main class="article-main">
+      <article class="article${hasProductVisual ? ' article-with-visual' : ''}">
+        <header class="article-header">
+          <a class="back-link" href="/blog/">Blog</a>
+          <p class="eyebrow">${escapeHtml(post.category)}</p>
+          <h1>${escapeHtml(post.title)}</h1>
+          <p class="article-summary">${escapeHtml(post.summary)}</p>
+          <p class="article-byline">By <strong>Emmanuel Muswalo</strong> <span>&middot;</span> <time datetime="${post.publishedAt}">${escapeHtml(post.displayDate)}</time> <span>&middot;</span> ${escapeHtml(post.readingTime)}</p>
+          ${shareLinks}
+        </header>
+        ${
+          hasProductVisual
+            ? `<figure class="article-product-visual"><img src="/app-screenshot.png" alt="Dottra app account screen showing available credit." width="1046" height="1860" /></figure>`
+            : ''
+        }
+        <div class="article-body">${articleBody}</div>
+      </article>
+      <aside class="related-reading" aria-labelledby="related-title">
+        <p class="section-label">Continue reading</p>
+        <h2 id="related-title">More from Dottra.</h2>
+        <ul>${relatedPosts}</ul>
+      </aside>
+    </main>
 ${renderFooter()}`
 }
 
 async function writePage(path: string, html: string) {
   const outputDir = resolve(pageOutputDir, path)
   await mkdir(outputDir, { recursive: true })
-  await writeFile(resolve(outputDir, 'index.html'), html)
+  await writeFile(resolve(outputDir, 'index.html'), normalizeHtml(html))
+}
+
+async function writeHomePage(html: string) {
+  await writeFile(resolve(pageOutputDir, 'index.html'), normalizeHtml(html))
 }
 
 async function pageExists(path: string) {
@@ -628,12 +919,70 @@ async function pageExists(path: string) {
   }
 }
 
-async function writeTextFile(path: string, contents: string) {
+async function writePublicFile(path: string, contents: string) {
   await writeFile(resolve(publicDir, path), contents)
+}
+
+function renderFeed() {
+  const items = blogPosts
+    .map(
+      (post) => `    <item>
+      <title>${escapeXml(post.title)}</title>
+      <link>${absoluteUrl(`blog/${post.slug}`)}</link>
+      <guid>${absoluteUrl(`blog/${post.slug}`)}</guid>
+      <pubDate>${new Date(`${post.publishedAt}T08:00:00Z`).toUTCString()}</pubDate>
+      <dc:creator>Emmanuel Muswalo</dc:creator>
+      <description>${escapeXml(post.summary)}</description>
+    </item>`,
+    )
+    .join('\n')
+
+  return `<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>Dottra Blog</title>
+    <link>${siteUrl}/blog/</link>
+    <description>Dottra product updates and practical financial-management articles.</description>
+    <language>en</language>
+${items}
+  </channel>
+</rss>
+`
+}
+
+function renderLlmsText() {
+  const articleLinks = blogPosts
+    .map((post) => `- [${post.title}](${absoluteUrl(`blog/${post.slug}`)}): ${post.summary}`)
+    .join('\n')
+
+  return `# Dottra
+
+> Dottra is a reusable digital credit line for eligible salaried workers and government-sponsored students in Zambia.
+
+## Product
+
+- [Product overview](${absoluteUrl('product')})
+- [How it works](${absoluteUrl('how-it-works')})
+- [Current pricing](${absoluteUrl('pricing')})
+- [Eligibility](${absoluteUrl('eligibility')})
+
+## Company and help
+
+- [About Dottra](${absoluteUrl('about')})
+- [Support](${absoluteUrl('support')})
+- [Contact](${absoluteUrl('contact')})
+- [Terms](${absoluteUrl('terms')})
+- [Privacy](${absoluteUrl('privacy')})
+
+## Blog
+
+${articleLinks}
+`
 }
 
 async function main() {
   await loadEnvFiles()
+  await writeHomePage(renderHomePage())
 
   for (const page of policyPages) {
     let policy: PublishedPolicy | null = null
@@ -657,27 +1006,48 @@ async function main() {
     await writePage(page.path, renderPolicyPage(page, null))
   }
 
-  for (const page of staticPages) {
-    await writePage(page.path, renderPage(page))
+  for (const page of standardPages) {
+    await writePage(page.path, renderStandardPage(page))
   }
 
-  const sitemapUrls = [
+  await writePage('pricing', renderPricingPage())
+  await writePage('blog', renderBlogIndex())
+
+  for (const post of blogPosts) {
+    await writePage(`blog/${post.slug}`, renderBlogPost(post))
+  }
+
+  const paths = [
     '',
     ...policyPages.map((page) => page.path),
-    ...staticPages.map((page) => page.path),
-  ].map((path) => `  <url><loc>${path ? absoluteUrl(path) : `${siteUrl}/`}</loc></url>`)
+    ...standardPages.map((page) => page.path),
+    'pricing',
+    'blog',
+    ...blogPosts.map((post) => `blog/${post.slug}`),
+  ]
+  const sitemapUrls = paths
+    .map((path) => `  <url><loc>${absoluteUrl(path)}</loc></url>`)
+    .join('\n')
 
-  await writeTextFile('sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>
+  await writePublicFile(
+    'sitemap.xml',
+    `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${sitemapUrls.join('\n')}
+${sitemapUrls}
 </urlset>
-`)
+`,
+  )
 
-  await writeTextFile('robots.txt', `User-agent: *
+  await writePublicFile(
+    'robots.txt',
+    `User-agent: *
 Allow: /
 
 Sitemap: ${siteUrl}/sitemap.xml
-`)
+`,
+  )
+  await writePublicFile('feed.xml', renderFeed())
+  await writePublicFile('llms.txt', renderLlmsText())
 }
 
 main().catch((error: unknown) => {

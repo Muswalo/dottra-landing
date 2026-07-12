@@ -1,6 +1,14 @@
-# Dottra Landing Site
+# Dottra Website
 
-Public landing site for Dottra at <https://dottra.co>.
+Static, multipage public website for Dottra at <https://dottra.co>.
+
+The build generates complete HTML for the homepage, product pages, pricing,
+eligibility, company pages, policy pages, the blog index, and every article. No
+public page depends on client-side routing or client-side rendering.
+
+Core product copy, current package data, and hard-coded articles live in
+`scripts/site-content.ts`. Page rendering and search-discovery files are built by
+`scripts/generate-static-pages.ts`.
 
 ## Development
 
@@ -19,7 +27,9 @@ SITE_URL=https://dottra.co bun run build
 
 The build generates:
 
-- Static legal and company pages
+- Static product, pricing, company, and policy pages
+- A static blog index and standalone article pages
+- Sitemap, RSS, robots, and AI-readable link index files
 - A production site in `dist`
 
 Open Graph images live in `public/og`. Regenerate them after copy changes with:
