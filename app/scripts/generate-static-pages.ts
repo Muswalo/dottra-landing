@@ -2,6 +2,11 @@ import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
+import { createElement } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
+import { FaLinkedinIn, FaWhatsapp, FaXTwitter } from 'react-icons/fa6'
+import { FiArrowLeft, FiArrowRight, FiMail, FiMenu, FiX } from 'react-icons/fi'
+import type { IconType } from 'react-icons'
 import type { Database, Json } from '../src/types/database.types'
 import {
   blogPosts,
@@ -307,6 +312,12 @@ function normalizeHtml(value: string): string {
   return `${value.replace(/[\t ]+$/gm, '').trimEnd()}\n`
 }
 
+function renderIcon(icon: IconType): string {
+  return renderToStaticMarkup(
+    createElement(icon, { 'aria-hidden': true, focusable: false }),
+  )
+}
+
 function absoluteUrl(path = ''): string {
   const cleanPath = path.replace(/^\/+|\/+$/g, '')
   return cleanPath ? `${siteUrl}/${cleanPath}/` : `${siteUrl}/`
@@ -391,6 +402,20 @@ function renderHeader() {
           <a href="/support/">Help</a>
         </nav>
         <a class="header-action" href="${googlePlayUrl}" target="_blank" rel="noreferrer">Get the app</a>
+        <details class="mobile-menu">
+          <summary aria-label="Open navigation" title="Menu">
+            <span class="menu-icon menu-icon-open">${renderIcon(FiMenu)}</span>
+            <span class="menu-icon menu-icon-close">${renderIcon(FiX)}</span>
+          </summary>
+          <nav class="mobile-menu-panel" aria-label="Mobile navigation">
+            <a href="/product/">Product</a>
+            <a href="/how-it-works/">How it works</a>
+            <a href="/pricing/">Pricing</a>
+            <a href="/eligibility/">Eligibility</a>
+            <a href="/blog/">Blog</a>
+            <a href="/support/">Help</a>
+          </nav>
+        </details>
       </div>
     </header>`
 }
@@ -447,14 +472,17 @@ function renderActions(actions?: PageLink[]) {
     return ''
   }
 
-  return `<div class="action-row">${actions
+  const hasStoreAction = actions.some((action) => action.href === googlePlayUrl)
+
+  return `<div class="action-row${hasStoreAction ? ' store-action-row' : ''}">${actions
     .map(
       (action, index) => {
         if (action.href === googlePlayUrl) {
           return `<a class="store-badge-link store-badge-action" href="${googlePlayUrl}" target="_blank" rel="noreferrer" aria-label="Get Dottra on Google Play"><img src="/google-play-badge.png" alt="Get it on Google Play" width="646" height="250" /></a>`
         }
 
-        return `<a class="button${index > 0 ? ' button-secondary' : ''}" href="${escapeHtml(action.href)}">${escapeHtml(action.label)}</a>`
+        const icon = action.href.startsWith('mailto:') ? FiMail : FiArrowRight
+        return `<a class="button${index > 0 ? ' button-secondary' : ''}" href="${escapeHtml(action.href)}"><span>${escapeHtml(action.label)}</span>${renderIcon(icon)}</a>`
       },
     )
     .join('')}</div>`
@@ -554,7 +582,7 @@ function renderHomePage() {
             <h3><a href="/blog/${post.slug}/">${escapeHtml(post.title)}</a></h3>
             <p>${escapeHtml(post.summary)}</p>
           </div>
-          <a class="text-link" href="/blog/${post.slug}/" aria-label="Read ${escapeHtml(post.title)}">Read article</a>
+          <a class="text-link text-link-with-icon" href="/blog/${post.slug}/" aria-label="Read ${escapeHtml(post.title)}"><span>Read article</span>${renderIcon(FiArrowRight)}</a>
         </article>`,
     )
     .join('\n')
@@ -595,9 +623,9 @@ ${renderHeader()}
           <p class="eyebrow">Now on Google Play</p>
           <h1>Your reusable credit line.</h1>
           <p class="home-lede">Built for eligible salaried workers and government-sponsored students in Zambia. See the complete cost before every draw, repay, and make credit available again.</p>
-          <div class="action-row">
+          <div class="action-row store-action-row">
             <a class="store-badge-link" href="${googlePlayUrl}" target="_blank" rel="noreferrer" aria-label="Get Dottra on Google Play"><img src="/google-play-badge.png" alt="Get it on Google Play" width="646" height="250" /></a>
-            <a class="button button-secondary" href="/how-it-works/">See how it works</a>
+            <a class="button button-secondary" href="/how-it-works/"><span>See how it works</span>${renderIcon(FiArrowRight)}</a>
           </div>
           <p class="hero-note">Approval and individual limits are subject to verification and affordability review.</p>
         </div>
@@ -636,7 +664,7 @@ ${renderHeader()}
             <p class="feature-number">02</p>
             <h3>No fee to join</h3>
             <p>There is no registration, membership, or subscription fee. Current package pricing is published on its own page.</p>
-            <a class="text-link" href="/pricing/">View pricing</a>
+            <a class="text-link text-link-with-icon" href="/pricing/"><span>View pricing</span>${renderIcon(FiArrowRight)}</a>
           </article>
           <article>
             <p class="feature-number">03</p>
@@ -658,7 +686,7 @@ ${renderHeader()}
             <p class="section-label">From the blog</p>
             <h2 id="latest-title">Latest from Dottra.</h2>
           </div>
-          <a class="text-link" href="/blog/">View all articles</a>
+          <a class="text-link text-link-with-icon" href="/blog/"><span>View all articles</span>${renderIcon(FiArrowRight)}</a>
         </div>
         <div class="post-list">${articles}</div>
       </section>
@@ -684,16 +712,16 @@ function renderPricingPage() {
       const amountReceived = amount - processingFee
       const fixedCharge = amount * fixedChargeRate
       const totalToRepay = amount + fixedCharge
-      const audience = studentAmounts.has(amount) ? 'Salaried and student' : 'Salaried'
+      const audience = studentAmounts.has(amount) ? 'Salaried + student' : 'Salaried only'
 
       return `<tr>
             <th scope="row">${formatKwacha(amount)}</th>
-            <td>${formatKwacha(processingFee)}</td>
-            <td>${formatKwacha(amountReceived)}</td>
-            <td>${formatKwacha(fixedCharge)}</td>
-            <td><strong>${formatKwacha(totalToRepay)}</strong></td>
-            <td>${packageTermDays} days</td>
-            <td>${audience}</td>
+            <td data-label="Processing Fee">${formatKwacha(processingFee)}</td>
+            <td data-label="Amount received">${formatKwacha(amountReceived)}</td>
+            <td data-label="Fixed Charge">${formatKwacha(fixedCharge)}</td>
+            <td data-label="Total to repay"><strong>${formatKwacha(totalToRepay)}</strong></td>
+            <td data-label="Term">${packageTermDays} days</td>
+            <td data-label="Available to">${audience}</td>
           </tr>`
     })
     .join('\n')
@@ -788,7 +816,7 @@ function renderBlogIndex() {
             <p>${escapeHtml(post.summary)}</p>
             <p class="byline">By Emmanuel Muswalo &middot; ${escapeHtml(post.readingTime)}</p>
           </div>
-          <a class="text-link" href="/blog/${post.slug}/" aria-label="Read ${escapeHtml(post.title)}">Read article</a>
+          <a class="text-link text-link-with-icon" href="/blog/${post.slug}/" aria-label="Read ${escapeHtml(post.title)}"><span>Read article</span>${renderIcon(FiArrowRight)}</a>
         </article>`,
     )
     .join('\n')
@@ -844,10 +872,10 @@ function renderBlogPost(post: BlogPost) {
   const encodedArticleUrl = encodeURIComponent(articleUrl)
   const encodedShareText = encodeURIComponent(post.title)
   const shareLinks = `<nav class="article-share" aria-label="Share this article">
-            <span>Share</span>
-            <a href="https://wa.me/?text=${encodedShareText}%20${encodedArticleUrl}" target="_blank" rel="noreferrer">WhatsApp</a>
-            <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodedArticleUrl}" target="_blank" rel="noreferrer">LinkedIn</a>
-            <a href="https://twitter.com/intent/tweet?text=${encodedShareText}&url=${encodedArticleUrl}" target="_blank" rel="noreferrer">X</a>
+            <span class="share-label">Share</span>
+            <a href="https://wa.me/?text=${encodedShareText}%20${encodedArticleUrl}" target="_blank" rel="noreferrer" aria-label="Share on WhatsApp">${renderIcon(FaWhatsapp)}<span>WhatsApp</span></a>
+            <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodedArticleUrl}" target="_blank" rel="noreferrer" aria-label="Share on LinkedIn">${renderIcon(FaLinkedinIn)}<span>LinkedIn</span></a>
+            <a href="https://twitter.com/intent/tweet?text=${encodedShareText}&url=${encodedArticleUrl}" target="_blank" rel="noreferrer" aria-label="Share on X">${renderIcon(FaXTwitter)}<span>Post</span></a>
           </nav>`
   const hasProductVisual = post.slug === 'introducing-dottra'
 
@@ -873,7 +901,7 @@ ${renderHeader()}
     <main class="article-main">
       <article class="article${hasProductVisual ? ' article-with-visual' : ''}">
         <header class="article-header">
-          <a class="back-link" href="/blog/">Blog</a>
+          <a class="back-link" href="/blog/">${renderIcon(FiArrowLeft)}<span>Blog</span></a>
           <p class="eyebrow">${escapeHtml(post.category)}</p>
           <h1>${escapeHtml(post.title)}</h1>
           <p class="article-summary">${escapeHtml(post.summary)}</p>
