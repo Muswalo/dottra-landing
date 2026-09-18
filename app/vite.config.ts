@@ -28,6 +28,7 @@ export default defineConfig({
         about: page('./about/index.html'),
         support: page('./support/index.html'),
         contact: page('./contact/index.html'),
+        deleteAccount: page('./delete-account/index.html'),
       },
     },
   },

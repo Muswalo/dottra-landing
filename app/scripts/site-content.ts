@@ -306,6 +306,53 @@ export const standardPages: StandardPage[] = [
       { label: 'Read the Privacy Policy', href: '/privacy/' },
     ],
   },
+  {
+    path: 'delete-account',
+    title: 'Delete your Dottra account.',
+    eyebrow: 'Account',
+    summary: 'Request deletion of your Dottra account and all associated data.',
+    sections: [
+      {
+        title: 'How to request account deletion',
+        paragraphs: [
+          'Send an email to support@dottra.co with the subject line "Account deletion request". Include the phone number or email address connected to your Dottra account so the team can locate your account.',
+          'Dottra will verify your identity before processing the request. You will receive a confirmation once your account and data have been deleted.',
+        ],
+      },
+      {
+        title: 'What gets deleted',
+        paragraphs: [
+          'When your account is deleted, the following data is permanently removed:',
+        ],
+        items: [
+          'Your account profile and login credentials.',
+          'App preferences and notification settings.',
+          'Device information linked to your account.',
+        ],
+      },
+      {
+        title: 'What may be retained',
+        paragraphs: [
+          'Certain records may be kept after account deletion where required by law, regulation, or legitimate business purposes:',
+        ],
+        items: [
+          'Transaction and repayment records — retained for accounting, audit, and regulatory compliance.',
+          'KYC and identity verification records — retained as required by anti-money-laundering and financial regulations.',
+          'Communication records related to disputes or complaints — retained until the matter is resolved.',
+        ],
+      },
+      {
+        title: 'Processing time',
+        paragraphs: [
+          'Account deletion requests are typically processed within 30 days. If your account has an outstanding balance or an active dispute, deletion may be delayed until the matter is resolved.',
+        ],
+      },
+    ],
+    actions: [
+      { label: 'Email support@dottra.co', href: 'mailto:support@dottra.co?subject=Account%20deletion%20request' },
+      { label: 'Read the Privacy Policy', href: '/privacy/' },
+    ],
+  },
 ]
 
 export const blogPosts: BlogPost[] = [
