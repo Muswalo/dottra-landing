@@ -1,0 +1,56 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/Section.astro';
+import { site } from '@/data/site';
+
+const mailto = `mailto:${site.email.support}?subject=${encodeURIComponent('Account deletion request')}`;
+---
+
+<PageLayout
+  title="Delete your Dottra account"
+  heading="Delete your Dottra account."
+  description="How to ask Dottra to delete your account and personal data, what is deleted, what we have to keep by law, and how long it takes."
+  eyebrow="Account"
+  crumbName="Delete account"
+  summary="You can ask us to delete your account and the personal data linked to it at any time."
+>
+  <div class="content-stack">
+    <Section title="How to ask">
+      <p>
+        Email <a href={mailto}>{site.email.support}</a> with the subject <strong>Account deletion request</strong>. Send it from
+        the email address on your account, or include the phone number on your account, so we can find it.
+      </p>
+      <p>We'll confirm your identity before deleting anything, and email you once it's done.</p>
+    </Section>
+
+    <Section title="Before you ask">
+      <p>
+        If you have an outstanding balance, it needs to be paid first. You can pay it in full from the Pay screen in the app.
+        Deletion is also paused while a dispute or complaint is open.
+      </p>
+    </Section>
+
+    <Section title="What we delete">
+      <ul>
+        <li>Your profile and sign-in details.</li>
+        <li>Your app settings and notification preferences.</li>
+        <li>Device information and push notification tokens linked to your account.</li>
+        <li>Your PIN and fingerprint approval records.</li>
+      </ul>
+    </Section>
+
+    <Section title="What we have to keep">
+      <p>Some records must be kept for a period set by law, even after an account is deleted:</p>
+      <ul>
+        <li>Records of draws, payments and statements, for accounting, audit and regulatory requirements.</li>
+        <li>Identity verification records, as required by anti-money-laundering rules.</li>
+        <li>Messages about an open complaint or dispute, until it's resolved.</li>
+      </ul>
+      <p>These are kept securely and only for as long as required, then deleted.</p>
+    </Section>
+
+    <Section title="How long it takes">
+      <p>We aim to complete deletion requests within 30 days of confirming your identity.</p>
+    </Section>
+  </div>
+</PageLayout>

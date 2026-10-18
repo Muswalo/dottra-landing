@@ -1,0 +1,39 @@
+---
+// Standard inner page: breadcrumbs, eyebrow, H1 and summary, then content.
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import type { Crumb } from '@/components/Seo.astro';
+
+interface Props {
+  title: string;
+  heading: string;
+  description: string;
+  eyebrow: string;
+  summary?: string;
+  ogImage?: string;
+  crumbName?: string;
+  meta?: string;
+  schema?: Record<string, unknown>[];
+}
+
+const { title, heading, description, eyebrow, summary, ogImage, crumbName, meta, schema = [] } =
+  Astro.props;
+
+const breadcrumbs: Crumb[] = [
+  { name: 'Home', href: '/' },
+  { name: crumbName ?? eyebrow, href: Astro.url.pathname },
+];
+---
+
+<BaseLayout title={title} description={description} ogImage={ogImage} breadcrumbs={breadcrumbs} schema={schema}>
+  <div class="page-main">
+    <section class="page-hero">
+      <Breadcrumbs items={breadcrumbs} />
+      <p class="section-label">{eyebrow}</p>
+      <h1>{heading}</h1>
+      {summary && <p class="summary">{summary}</p>}
+      {meta && <p class="document-meta">{meta}</p>}
+    </section>
+    <slot />
+  </div>
+</BaseLayout>

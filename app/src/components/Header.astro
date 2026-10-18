@@ -1,0 +1,36 @@
+---
+import { mainNav, site } from '@/data/site';
+
+const current = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? current === '/' : current === href || current.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="header-inner">
+    <a class="brand" href="/" aria-label="Dottra home">
+      <img src="/dottra-symbol-light.png" alt="" width="34" height="24" />
+      <span>Dottra</span>
+    </a>
+    <nav class="site-nav" aria-label="Main navigation">
+      {mainNav.map((item) => (
+        <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+      ))}
+    </nav>
+    <a class="header-action" href={site.googlePlayUrl} rel="noopener">Get the app</a>
+    <details class="mobile-menu">
+      <summary aria-label="Open navigation" title="Menu">
+        <span class="menu-icon menu-icon-open" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </span>
+        <span class="menu-icon menu-icon-close" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </span>
+      </summary>
+      <nav class="mobile-menu-panel" aria-label="Mobile navigation">
+        {mainNav.map((item) => <a href={item.href}>{item.label}</a>)}
+        <a href={site.googlePlayUrl} rel="noopener">Get the app</a>
+      </nav>
+    </details>
+  </div>
+</header>

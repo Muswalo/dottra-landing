@@ -1,0 +1,211 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Arrow from '@/components/Arrow.astro';
+import { formatDate, kwacha, monthlyCharge, percent, pricing, processingFee } from '@/data/site';
+
+const feeExamples = [10, 50, 200, 500, 1000, 3000].map((draw) => {
+  const fee = processingFee(draw);
+  return { draw, fee, received: Math.round((draw - fee) * 100) / 100 };
+});
+
+// Worked examples in a 30-day month.
+const days = 30;
+const scenarios = [
+  { label: 'Draw K500 on day 1, pay nothing back that month', principal: 500, held: 30 },
+  { label: 'Draw K500 on day 1, pay it all back on day 16', principal: 500, held: 15 },
+  { label: 'Draw K500 on day 21, pay nothing back that month', principal: 500, held: 10 },
+  { label: 'Draw K200 on day 1, pay it all back on day 8', principal: 200, held: 7 },
+].map((s) => ({ ...s, average: Math.round(((s.principal * s.held) / days) * 100) / 100, charge: monthlyCharge(s.principal, s.held, days) }));
+
+const faqs = [
+  {
+    q: 'Is there a fee to sign up or keep the account?',
+    a: 'No. There is no registration, membership, subscription or inactivity fee. If you never draw, Dottra costs nothing.',
+  },
+  {
+    q: 'Are there late payment fees?',
+    a: `No. If a statement is not paid by the end of its due date, the facility is temporarily frozen until the overdue amount is paid. The monthly charge continues to apply to any balance you still owe, as it does every month.`,
+  },
+  {
+    q: 'Is the monthly charge added to the balance it is worked out on?',
+    a: 'No. The monthly charge is worked out only on the money you drew. Processing fees and earlier monthly charges are not included in the average daily balance.',
+  },
+  {
+    q: 'Can I pay back early?',
+    a: `Yes, on any day, from ${kwacha(pricing.minimumPayment)} up to your full balance. Paying earlier lowers your average daily balance for the month, so the monthly charge is smaller. There is no fee for paying early.`,
+  },
+  {
+    q: 'Do the same prices apply to students and salaried customers?',
+    a: 'Yes. Students and salaried customers have the same processing fee, monthly charge, minimum draw, minimum payment and grace period. Credit limits differ.',
+  },
+  {
+    q: 'Can prices change?',
+    a: 'They can, for future draws and future months. Any change is published on this page and shown in the app before it applies to you. The figures shown in the app when you confirm a draw are the ones that apply to that draw.',
+  },
+];
+
+const schema = [
+  {
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+
+<PageLayout
+  title="Pricing"
+  heading="What Dottra costs."
+  description={`A ${percent(pricing.processingFeeRate)} processing fee per draw (minimum ${kwacha(pricing.processingFeeMinimum)}) and a monthly charge of ${percent(pricing.monthlyChargeRate)} of your average daily balance. No sign-up or late fees.`}
+  eyebrow="Pricing"
+  summary="Two charges. A processing fee each time you draw, and a monthly charge based on how much you owed during the month. Nothing else."
+  ogImage="/og/pricing.png"
+  meta={`Prices reviewed ${formatDate(pricing.reviewedAt)}. The same prices apply to students and salaried customers.`}
+  schema={schema}
+>
+  <div class="rate-summary">
+    <div>
+      <span>Processing fee</span>
+      <strong>{percent(pricing.processingFeeRate)}</strong>
+      <p>of each draw, minimum {kwacha(pricing.processingFeeMinimum)}. Taken from the amount you receive.</p>
+    </div>
+    <div>
+      <span>Monthly charge</span>
+      <strong>{percent(pricing.monthlyChargeRate)}</strong>
+      <p>of your average daily balance for the calendar month.</p>
+    </div>
+    <div>
+      <span>Payment due</span>
+      <strong>{pricing.gracePeriodDays} days</strong>
+      <p>after the statement date. Statements are dated the last day of the month.</p>
+    </div>
+  </div>
+
+  <div class="prose-block">
+    <h2>The processing fee</h2>
+    <p>
+      Every draw has a processing fee of {percent(pricing.processingFeeRate)} of the amount you draw, rounded to the
+      nearest ngwee, with a minimum of {kwacha(pricing.processingFeeMinimum)}. It's taken from the money sent to you: the
+      full amount you draw is added to your balance, and the amount minus the fee arrives on mobile money.
+    </p>
+  </div>
+
+  <div class="table-scroll">
+    <table class="figures">
+      <caption>Processing fee by draw amount</caption>
+      <thead>
+        <tr>
+          <th scope="col">You draw</th>
+          <th scope="col" class="amount">Processing fee</th>
+          <th scope="col" class="amount">You receive</th>
+          <th scope="col" class="amount">Added to your balance</th>
+        </tr>
+      </thead>
+      <tbody>
+        {feeExamples.map((row) => (
+          <tr>
+            <th scope="row">{kwacha(row.draw)}</th>
+            <td class="amount">{kwacha(row.fee)}</td>
+            <td class="amount">{kwacha(row.received)}</td>
+            <td class="amount">{kwacha(row.draw)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="prose-block">
+    <h2>The monthly charge</h2>
+    <p>
+      At the end of each calendar month, we add up how much you had drawn and not yet paid back at the end of each day,
+      divide by the number of days in the month to get your average daily balance, and charge
+      {percent(pricing.monthlyChargeRate)} of that. The result is rounded once, to the nearest ngwee.
+    </p>
+    <p>
+      Only money you drew counts. Processing fees and earlier monthly charges aren't part of the balance the charge is
+      worked out on. If you owed nothing at any point in the month, there's no charge.
+    </p>
+  </div>
+
+  <div class="table-scroll">
+    <table class="figures">
+      <caption>Monthly charge examples in a 30-day month</caption>
+      <thead>
+        <tr>
+          <th scope="col">What happened</th>
+          <th scope="col" class="amount">Average daily balance</th>
+          <th scope="col" class="amount">Monthly charge</th>
+        </tr>
+      </thead>
+      <tbody>
+        {scenarios.map((s) => (
+          <tr>
+            <th scope="row">{s.label}</th>
+            <td class="amount">{kwacha(s.average)}</td>
+            <td class="amount">{kwacha(s.charge)}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="prose-block">
+    <h2>A full example</h2>
+    <p>You draw K500 on 1 November and don't pay anything back during November (30 days).</p>
+  </div>
+
+  <div class="table-scroll">
+    <table class="figures">
+      <tbody>
+        <tr><th scope="row">Added to your balance on 1 November</th><td class="amount">{kwacha(500)}</td></tr>
+        <tr><th scope="row">Processing fee</th><td class="amount">{kwacha(processingFee(500))}</td></tr>
+        <tr><th scope="row">Received on mobile money</th><td class="amount">{kwacha(500 - processingFee(500))}</td></tr>
+        <tr><th scope="row">Average daily balance for November</th><td class="amount">{kwacha(500)}</td></tr>
+        <tr><th scope="row">Monthly charge for November</th><td class="amount">{kwacha(monthlyCharge(500, 30, 30))}</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><th scope="row">Amount due on the 30 November statement, payable by 7 December</th><td class="amount">{kwacha(500 + monthlyCharge(500, 30, 30))}</td></tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="prose-block">
+    <p>
+      If you had paid the K500 back on 16 November instead, the November charge would have been
+      {kwacha(monthlyCharge(500, 15, 30))} and there would be nothing to pay on the statement.
+    </p>
+
+    <h2>Other figures</h2>
+    <ul>
+      <li>Smallest draw: {kwacha(pricing.minimumDraw)}.</li>
+      <li>Smallest payment: {kwacha(pricing.minimumPayment)}, or your full balance if that's less.</li>
+      <li>Payments go to monthly charges first (oldest first), then to the money you drew.</li>
+      <li>No sign-up, membership, early payment or late payment fees.</li>
+      <li>Your network may charge its own fees for mobile money transactions. These are set by the network, not Dottra.</li>
+    </ul>
+
+    <p class="note">
+      The figures in the app when you confirm a draw are the ones that apply to that draw. This page shows the current
+      prices; if they change, the new prices apply only to future draws and months.
+    </p>
+
+    <h2>Questions about pricing</h2>
+  </div>
+
+  <div class="faq prose-block">
+    {faqs.map((f) => (
+      <details>
+        <summary>{f.q}</summary>
+        <div class="answer"><p>{f.a}</p></div>
+      </details>
+    ))}
+  </div>
+
+  <div class="action-row">
+    <a class="button" href="/how-it-works/"><span>How it works</span><Arrow /></a>
+    <a class="button button-secondary" href="/blog/introducing-dottra/"><span>A month on Dottra, worked through</span><Arrow /></a>
+  </div>
+</PageLayout>

@@ -1,0 +1,105 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/Section.astro';
+import Photo from '@/components/Photo.astro';
+import Arrow from '@/components/Arrow.astro';
+import { kwacha, percent, pricing } from '@/data/site';
+---
+
+<PageLayout
+  title="The Dottra credit facility"
+  heading="One credit limit you can use more than once."
+  description="Dottra is a reusable credit facility for eligible salaried workers and sponsored students in Zambia. Draw to mobile money, pay back any time, and receive one statement a month."
+  eyebrow="Product"
+  summary="Dottra gives you a credit limit after we check who you are and what you can afford. You draw from it when you need to, pay it back when you can, and draw again."
+  ogImage="/og/product.png"
+>
+  <div class="content-stack">
+    <Section title="What you get">
+      <p>
+        A credit facility with one limit. Inside the app you can always see your <strong>credit limit</strong>, your
+        <strong>available credit</strong> (the part you can still draw), and your <strong>outstanding balance</strong>.
+      </p>
+      <p>
+        You don't apply each time you need money. Once your limit is set, a draw takes a few seconds and goes to the mobile
+        money number registered in your name.
+      </p>
+    </Section>
+
+    <Section title="Draw the amount you need">
+      <p>
+        You choose the amount: anything from {kwacha(pricing.minimumDraw)} up to your available credit, to the ngwee.
+        There are no fixed packages to pick from.
+      </p>
+      <p>
+        Before you confirm, the app shows how much will be added to your balance, the processing fee, and exactly how much
+        will arrive on mobile money. You confirm with your PIN or fingerprint.
+      </p>
+    </Section>
+
+    <Section title="Pay back on your schedule">
+      <p>
+        You can pay any amount from {kwacha(pricing.minimumPayment)} (or the full balance, if it's less), on any day, from
+        mobile money. As you pay back what you drew, your available credit goes back up.
+      </p>
+      <p>
+        The monthly charge is worked out on your average daily balance, so paying back earlier costs less. There's no
+        charge for paying early.
+      </p>
+    </Section>
+
+    <Section title="One statement a month">
+      <p>
+        If you owe anything at the end of a calendar month, the app produces a statement. It lists your draws, payments
+        and the monthly charge, and gives a payment due date {pricing.gracePeriodDays} days after the statement date.
+      </p>
+      <p>If you owe nothing, there's no statement and no charge.</p>
+    </Section>
+
+    <Section title="What it costs">
+      <ul>
+        <li>A processing fee of {percent(pricing.processingFeeRate)} of each draw, minimum {kwacha(pricing.processingFeeMinimum)}, taken from the amount you receive.</li>
+        <li>A monthly charge of {percent(pricing.monthlyChargeRate)} of your average daily balance for the month.</li>
+        <li>No sign-up, membership or late fees.</li>
+      </ul>
+      <p><a class="text-link text-link-with-icon" href="/pricing/"><span>See pricing with worked examples</span><Arrow /></a></p>
+    </Section>
+
+    <Section title="If a statement goes overdue">
+      <p>
+        If a statement isn't paid by the end of its due date, the facility is temporarily frozen. You can't draw while it's
+        frozen, but you can still pay. Once the overdue amount is paid, it unfreezes automatically.
+      </p>
+    </Section>
+
+    <Section title="What Dottra is not">
+      <p>
+        It's not a savings account, and it's not meant for borrowing over many months. It works best for short gaps: a cost
+        that arrives before your salary or allowance does, which you can pay back within a few weeks.
+      </p>
+      <p>
+        If you find yourself drawing every month to cover the same shortfall, that's a budget problem that credit will make
+        worse. Our guide to <a href="/blog/use-a-credit-line-with-a-plan/">using a credit facility without falling behind</a> covers this.
+      </p>
+    </Section>
+
+    <Section title="Security">
+      <p>
+        Every draw needs your PIN or fingerprint. Money is only ever sent to the mobile money number registered in your
+        name. The app doesn't ask for access to your contacts, photos or messages.
+      </p>
+      <p>
+        Dottra staff will never ask for your PIN, password or a one-time code, by phone, SMS, WhatsApp or email.
+      </p>
+    </Section>
+  </div>
+
+  <div class="page-photo">
+    <Photo name="cairo-road-mobile-money" sizes="(max-width: 860px) 100vw, 560px" />
+  </div>
+
+  <div class="action-row">
+    <a class="button" href="/how-it-works/"><span>How it works, step by step</span><Arrow /></a>
+    <a class="button button-secondary" href="/eligibility/"><span>Who can apply</span><Arrow /></a>
+  </div>
+</PageLayout>

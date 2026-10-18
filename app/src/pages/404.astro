@@ -1,0 +1,18 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Arrow from '@/components/Arrow.astro';
+---
+
+<BaseLayout title="Page not found" description="The page you were looking for isn't on dottra.co. Try the home page, pricing, help or the blog." noindex>
+  <div class="page-main not-found">
+    <p class="section-label">404</p>
+    <h1>We can't find that page.</h1>
+    <p class="summary">It may have moved, or the link may be wrong. These pages are a good place to start:</p>
+    <div class="action-row">
+      <a class="button" href="/"><span>Home</span><Arrow /></a>
+      <a class="button button-secondary" href="/pricing/"><span>Pricing</span><Arrow /></a>
+      <a class="button button-secondary" href="/support/"><span>Help</span><Arrow /></a>
+      <a class="button button-secondary" href="/blog/"><span>Blog</span><Arrow /></a>
+    </div>
+  </div>
+</BaseLayout>

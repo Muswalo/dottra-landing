@@ -1,0 +1,168 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Arrow from '@/components/Arrow.astro';
+import Photo from '@/components/Photo.astro';
+import StoreBadge from '@/components/StoreBadge.astro';
+import screenshot from '@/assets/app-screenshot.png';
+import { formatDate, kwacha, percent, pricing, processingFee, site } from '@/data/site';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime())
+  .slice(0, 3);
+
+const exampleDraw = 500;
+const exampleFee = processingFee(exampleDraw);
+---
+
+<BaseLayout
+  title="Dottra | Reusable credit for salaried workers and students in Zambia"
+  description={site.description}
+  schema={[
+    {
+      '@type': 'MobileApplication',
+      name: 'Dottra',
+      operatingSystem: 'Android',
+      applicationCategory: 'FinanceApplication',
+      url: site.googlePlayUrl,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'ZMW' },
+      publisher: { '@id': `${site.url}/#organization` },
+    },
+  ]}
+>
+  <section class="home-hero page-width">
+    <div class="home-hero-copy">
+      <p class="eyebrow">Android app, Zambia</p>
+      <h1>A credit facility you can draw from, pay back and use again.</h1>
+      <p class="home-lede">
+        For salaried workers and government-sponsored students. Draw any amount from {kwacha(pricing.minimumDraw)} up to
+        your available credit, receive it on mobile money, and pay back on your own schedule. You get one statement a month.
+      </p>
+      <div class="action-row store-action-row">
+        <StoreBadge />
+        <a class="button button-secondary" href="/how-it-works/"><span>How it works</span><Arrow /></a>
+      </div>
+      <p class="hero-note">Limits are set after identity checks and an affordability review. Not everyone who applies is approved.</p>
+    </div>
+    <figure class="product-visual">
+      <Image
+        src={screenshot}
+        alt="The Dottra app home screen showing available credit, the credit limit and recent activity."
+        widths={[320, 520, 760]}
+        sizes="(max-width: 860px) 70vw, 380px"
+        format="webp"
+        loading="eager"
+        fetchpriority="high"
+      />
+    </figure>
+  </section>
+
+  <section class="cycle-band" aria-labelledby="cycle-title">
+    <div class="cycle-inner page-width">
+      <div>
+        <p class="section-label">How the facility works</p>
+        <h2 id="cycle-title">What you pay back becomes available again.</h2>
+      </div>
+      <ol class="credit-cycle">
+        <li><span>01</span><strong>Get a credit limit</strong></li>
+        <li><span>02</span><strong>Draw what you need</strong></li>
+        <li><span>03</span><strong>Pay back any time</strong></li>
+        <li><span>04</span><strong>Draw again</strong></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="home-section page-width" aria-labelledby="costs-title">
+    <div class="section-intro">
+      <p class="section-label">What it costs</p>
+      <h2 id="costs-title">Two charges, both shown in the app before you agree to anything.</h2>
+    </div>
+    <div class="feature-list">
+      <article>
+        <p class="feature-number">01</p>
+        <h3>{percent(pricing.processingFeeRate)} processing fee per draw</h3>
+        <p>
+          Taken from the amount you draw, with a minimum of {kwacha(pricing.processingFeeMinimum)}. Draw
+          {kwacha(exampleDraw)} and {kwacha(exampleDraw - exampleFee)} reaches your mobile money wallet.
+        </p>
+      </article>
+      <article>
+        <p class="feature-number">02</p>
+        <h3>{percent(pricing.monthlyChargeRate)} monthly charge on what you used</h3>
+        <p>
+          Worked out on your average daily balance for the month. Pay back early and the charge is smaller. If you owe
+          nothing, there is no charge.
+        </p>
+      </article>
+      <article>
+        <p class="feature-number">03</p>
+        <h3>Nothing to join</h3>
+        <p>No registration, membership or subscription fee. Having a limit you don't use costs nothing.</p>
+        <a class="text-link text-link-with-icon" href="/pricing/"><span>Full pricing and examples</span><Arrow /></a>
+      </article>
+    </div>
+  </section>
+
+  <section class="page-width photo-band" aria-labelledby="who-title">
+    <Photo name="lusaka-market" sizes="(max-width: 860px) 100vw, 600px" />
+    <div>
+      <p class="section-label">Who it is for</p>
+      <h2 id="who-title">Income that arrives once a month. Costs that don't wait for it.</h2>
+      <p>
+        School fees, transport, a medical bill, stock for a side business. Plenty of people with steady income still get
+        caught between paydays or between allowance payments.
+      </p>
+      <p>
+        Dottra is for those gaps. It is not meant for long-term borrowing, and it works best when you know what you'll use
+        it for and when you'll pay it back.
+      </p>
+      <a class="text-link text-link-with-icon" href="/eligibility/"><span>Check whether you can apply</span><Arrow /></a>
+    </div>
+  </section>
+
+  <section class="link-section page-width" aria-label="Learn more about Dottra">
+    <a href="/product/"><span>Product</span><strong>What the facility is, and what it isn't</strong></a>
+    <a href="/how-it-works/"><span>Step by step</span><strong>From signing up to your first statement</strong></a>
+    <a href="/support/"><span>Questions</span><strong>Answers to the questions people ask most</strong></a>
+  </section>
+
+  <section class="home-section page-width" aria-labelledby="latest-title">
+    <div class="section-intro section-intro-row">
+      <div>
+        <p class="section-label">From the blog</p>
+        <h2 id="latest-title">Practical guides on money in Zambia.</h2>
+      </div>
+      <a class="text-link text-link-with-icon" href="/blog/"><span>All articles</span><Arrow /></a>
+    </div>
+    <div class="post-list">
+      {posts.map((post) => (
+        <article class="post-row">
+          <div class="post-meta">
+            <span>{post.data.category}</span>
+            <time datetime={post.data.publishedAt.toISOString().slice(0, 10)}>
+              {formatDate(post.data.publishedAt.toISOString())}
+            </time>
+          </div>
+          <div>
+            <h3><a href={`/blog/${post.id}/`}>{post.data.title}</a></h3>
+            <p>{post.data.summary}</p>
+          </div>
+          <a class="text-link text-link-with-icon" href={`/blog/${post.id}/`} aria-label={`Read ${post.data.title}`}>
+            <span>Read</span><Arrow />
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="closing-band">
+    <div class="closing-inner page-width">
+      <div>
+        <p class="section-label">Dottra for Android</p>
+        <h2>Free to download. You only pay when you draw.</h2>
+      </div>
+      <StoreBadge className="store-badge-on-dark" />
+    </div>
+  </section>
+</BaseLayout>

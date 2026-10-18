@@ -1,0 +1,40 @@
+---
+import { footerNav, site } from '@/data/site';
+import StoreBadge from './StoreBadge.astro';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand-block">
+      <a class="footer-brand" href="/" aria-label="Dottra home">
+        <img src="/dottra-symbol-dark.png" alt="" width="34" height="24" />
+        <span>Dottra</span>
+      </a>
+      <p>A reusable credit facility built in Zambia.</p>
+      <address>
+        {site.legalName}<br />
+        {site.address.street}<br />
+        {site.address.locality} {site.address.postalCode}, {site.address.countryName}
+      </address>
+    </div>
+    {footerNav.map((column) => (
+      <div class="footer-column">
+        <h2>{column.title}</h2>
+        {column.links.map((link) => <a href={link.href}>{link.label}</a>)}
+      </div>
+    ))}
+    <div class="footer-column">
+      <h2>Get Dottra</h2>
+      <StoreBadge className="footer-store-badge" />
+      <span>iPhone app not yet available</span>
+      <a href={`mailto:${site.email.support}`}>{site.email.support}</a>
+      <a href={site.phoneHref}>{site.phone}</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&copy; {year} {site.legalName}. Registered in Zambia.</span>
+    <span>PACRA {site.pacra}</span>
+  </div>
+</footer>

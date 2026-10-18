@@ -1,0 +1,13 @@
+---
+import { site } from '@/data/site';
+
+interface Props {
+  className?: string;
+}
+
+const { className = '' } = Astro.props;
+---
+
+<a class={`store-badge-link ${className}`.trim()} href={site.googlePlayUrl} rel="noopener" aria-label="Get Dottra on Google Play">
+  <img src="/google-play-badge.png" alt="Get it on Google Play" width="646" height="250" loading="lazy" decoding="async" />
+</a>

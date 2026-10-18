@@ -1,0 +1,60 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/Section.astro';
+import { loadPolicy, policyFallbacks, type PolicyKey } from '@/lib/policies';
+import { formatDate, site } from '@/data/site';
+
+interface Props {
+  policyKey: PolicyKey;
+}
+
+const { policyKey } = Astro.props;
+const policy = await loadPolicy(policyKey);
+const fallback = policyFallbacks[policyKey];
+
+const title = policy?.title ?? fallback.title;
+const summary = policy?.summary ?? fallback.summary;
+const metaParts = [
+  policy?.updatedAt ? `Last updated ${formatDate(policy.updatedAt)}.` : '',
+  policy?.effectiveAt ? `Effective ${formatDate(policy.effectiveAt)}.` : '',
+  policy?.footerNote ?? '',
+].filter(Boolean);
+
+const schema = [
+  {
+    '@type': 'WebPage',
+    '@id': `${site.url}/${policyKey}/#page`,
+    url: `${site.url}/${policyKey}/`,
+    name: title,
+    ...(policy?.updatedAt ? { dateModified: policy.updatedAt } : {}),
+    publisher: { '@id': `${site.url}/#organization` },
+  },
+];
+---
+
+<PageLayout
+  title={title}
+  heading={title}
+  description={summary}
+  eyebrow={policy?.eyebrow ?? 'Legal'}
+  crumbName={title}
+  summary={summary}
+  meta={metaParts.length ? metaParts.join(' ') : undefined}
+  ogImage="/og/legal.png"
+  schema={schema}
+>
+  <div class="content-stack">
+    {policy ? (
+      policy.sections.map((section) => (
+        <Section title={section.title} id={section.id}>
+          {section.body.map((paragraph) => <p>{paragraph}</p>)}
+        </Section>
+      ))
+    ) : (
+      <Section title="Not published yet">
+        <p>The current version of this document will appear here once it's published. The same text is shown in the Dottra app.</p>
+        <p>For questions in the meantime, email <a href={`mailto:${site.email.company}`}>{site.email.company}</a>.</p>
+      </Section>
+    )}
+  </div>
+</PageLayout>

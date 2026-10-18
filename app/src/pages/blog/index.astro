@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content';
+import PageLayout from '@/layouts/PageLayout.astro';
+import Arrow from '@/components/Arrow.astro';
+import { formatDate, site } from '@/data/site';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+);
+
+const schema = [
+  {
+    '@type': 'Blog',
+    '@id': `${site.url}/blog/#blog`,
+    name: 'Dottra blog',
+    url: `${site.url}/blog/`,
+    publisher: { '@id': `${site.url}/#organization` },
+    blogPost: posts.map((post) => ({
+      '@type': 'BlogPosting',
+      headline: post.data.title,
+      url: `${site.url}/blog/${post.id}/`,
+      datePublished: post.data.publishedAt.toISOString(),
+    })),
+  },
+];
+---
+
+<PageLayout
+  title="Blog: money, mobile money and credit in Zambia"
+  heading="Practical guides on money in Zambia."
+  description="Plain guides on budgeting, mobile money, salary advances, student allowances and using credit carefully, written for people in Zambia."
+  eyebrow="Blog"
+  summary="Budgeting on a Zambian salary, getting through a semester on an allowance, mobile money safety, and how to use credit without it getting out of hand."
+  ogImage="/og/blog.png"
+  schema={schema}
+>
+  <div class="blog-index">
+    {posts.map((post) => (
+      <article class="blog-index-row">
+        <div class="post-meta">
+          <span>{post.data.category}</span>
+          <time datetime={post.data.publishedAt.toISOString().slice(0, 10)}>{formatDate(post.data.publishedAt.toISOString())}</time>
+        </div>
+        <div>
+          <h2><a href={`/blog/${post.id}/`}>{post.data.title}</a></h2>
+          <p>{post.data.summary}</p>
+        </div>
+        <a class="text-link text-link-with-icon" href={`/blog/${post.id}/`} aria-label={`Read ${post.data.title}`}><span>Read</span><Arrow /></a>
+      </article>
+    ))}
+  </div>
+  <p class="document-meta">Subscribe to new articles with the <a href="/feed.xml">RSS feed</a>.</p>
+</PageLayout>

@@ -27,6 +27,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
 
@@ -34,16 +39,21 @@ jobs:
         working-directory: app
         run: bun install --frozen-lockfile
 
+      - name: Type and template checks
+        working-directory: app
+        run: bun run check
+
       - name: Build
         working-directory: app
         run: bun run build
         env:
           SITE_URL: https://dottra.co
-          VITE_SITE_URL: https://dottra.co
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
           SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+
+      - name: Verify build
+        working-directory: app
+        run: bun run verify
 
       - name: Publish build output to root
         run: |
@@ -52,9 +62,9 @@ jobs:
             --exclude .github \
             --exclude .gitignore \
             --exclude app \
-            --exclude dist \
             --exclude node_modules \
             app/dist/ ./
+          touch .nojekyll
 
       - name: Commit build output
         run: |

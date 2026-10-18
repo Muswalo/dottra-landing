@@ -1,0 +1,111 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/Section.astro';
+import Photo from '@/components/Photo.astro';
+import StoreBadge from '@/components/StoreBadge.astro';
+import { kwacha, pricing, supportedUniversities } from '@/data/site';
+
+const faqs = [
+  {
+    q: 'Can I apply if I am self-employed or run a business?',
+    a: 'Not yet. Dottra currently serves salaried employees with a payslip and government-sponsored students at supported universities.',
+  },
+  {
+    q: 'Can students without government sponsorship apply?',
+    a: 'Not at the moment. The student route is for government-sponsored students at the supported universities listed on this page.',
+  },
+  {
+    q: 'Does the mobile money number have to be in my name?',
+    a: 'Yes. Draws are only sent to a mobile money wallet registered in the same name as your Dottra account and NRC.',
+  },
+  {
+    q: 'Why was my application declined, or my limit lower than I expected?',
+    a: 'Limits depend on verified income or sponsorship and an affordability review. We do not set a limit for everyone who applies, and we cannot share the details of how individual decisions are made. You can contact support if you think something was verified incorrectly.',
+  },
+];
+
+const schema = [
+  {
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  },
+];
+---
+
+<PageLayout
+  title="Who can apply"
+  heading="Who can apply for Dottra."
+  description="Dottra is open to salaried employees and government-sponsored students at supported universities in Zambia who are 18 or older and have an NRC and a mobile money wallet in their name."
+  eyebrow="Eligibility"
+  summary="Dottra is currently for two groups: people in salaried employment, and government-sponsored students at supported universities in Zambia."
+  ogImage="/og/eligibility.png"
+  schema={schema}
+>
+  <div class="content-stack">
+    <Section title="Everyone needs">
+      <ul>
+        <li>To be 18 or older.</li>
+        <li>A valid Zambian NRC.</li>
+        <li>An MTN, Airtel or Zamtel mobile money wallet registered in your own name.</li>
+        <li>An Android phone, to use the app and take document photos.</li>
+        <li>To pass identity verification: photos of your NRC and a selfie.</li>
+      </ul>
+    </Section>
+
+    <Section title="Salaried employees">
+      <p>You need to be in salaried employment, in the public or private sector, and able to upload a recent payslip.</p>
+      <p>
+        In the app you'll add your employer, job title, type of employment, net pay and pay day. We use these, with the
+        payslip, for an affordability review.
+      </p>
+      <p>As a guide, salaried limits go up to {kwacha(pricing.guideLimits.salaried)}. Your limit may be lower.</p>
+    </Section>
+
+    <Section title="Government-sponsored students">
+      <p>You need to be a government-sponsored student at one of these universities:</p>
+      <ul>
+        {supportedUniversities.map((name) => <li>{name}</li>)}
+      </ul>
+      <p>
+        In the app you'll add your student number and expected graduation year, and upload your student ID and sponsorship
+        document.
+      </p>
+      <p>As a guide, student limits go up to {kwacha(pricing.guideLimits.student)}. Your limit may be lower.</p>
+    </Section>
+
+    <Section title="How decisions are made">
+      <p>
+        Once your documents are approved, we review affordability and set a credit limit. Meeting the requirements above
+        doesn't guarantee a limit, and limits vary between people. Your limit can be reviewed over time.
+      </p>
+      <p>
+        Every draw is also checked against your available credit and account status at the time, so having a limit doesn't
+        mean every draw will go through.
+      </p>
+    </Section>
+  </div>
+
+  <div class="page-photo">
+    <Photo name="university-of-zambia" sizes="(max-width: 860px) 100vw, 760px" />
+  </div>
+
+  <div class="prose-block">
+    <h2>Common questions</h2>
+  </div>
+  <div class="faq prose-block">
+    {faqs.map((f) => (
+      <details>
+        <summary>{f.q}</summary>
+        <div class="answer"><p>{f.a}</p></div>
+      </details>
+    ))}
+  </div>
+
+  <div class="action-row">
+    <StoreBadge />
+  </div>
+</PageLayout>

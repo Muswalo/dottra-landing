@@ -1,0 +1,68 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/Section.astro';
+import Photo from '@/components/Photo.astro';
+import { site } from '@/data/site';
+
+const schema = [
+  {
+    '@type': 'AboutPage',
+    '@id': `${site.url}/about/#page`,
+    url: `${site.url}/about/`,
+    name: 'About Dottra',
+    about: { '@id': `${site.url}/#organization` },
+  },
+];
+---
+
+<PageLayout
+  title="About Dottra"
+  heading="About Dottra."
+  description="Dottra Lending Services Limited is a Lusaka company building a reusable credit facility for salaried workers and sponsored students in Zambia."
+  eyebrow="Company"
+  summary="We're a Lusaka company building credit for people whose income arrives once a month while their costs don't."
+  ogImage="/og/about.png"
+  schema={schema}
+>
+  <div class="content-stack">
+    <Section title="Why we built it">
+      <p>
+        Plenty of people in Zambia have steady income, whether a salary or a government allowance, and still get caught out
+        when a cost arrives before the money does. The usual options are asking family, waiting on an employer advance, or
+        borrowing from an app that doesn't explain what it costs.
+      </p>
+      <p>
+        Dottra is a credit facility you set up once and use when you need it. The cost is shown in kwacha before you agree,
+        the charge depends on how long you actually owe money, and you can pay back on any day.
+      </p>
+    </Section>
+
+    <Section title="How we work">
+      <ul>
+        <li>We publish our full pricing, with examples, and the app shows the exact figures before every draw.</li>
+        <li>We don't charge late fees. An overdue statement freezes the facility until it's paid.</li>
+        <li>We don't ask for access to your contacts, photos or messages, and we don't contact your friends or family.</li>
+        <li>We set limits based on verified income and an affordability review, not on how much you ask for.</li>
+      </ul>
+    </Section>
+
+    <Section title="The company">
+      <p>
+        {site.legalName} is registered in Zambia with PACRA under registration number {site.pacra}. Our registered office is
+        at {site.address.street}, {site.address.locality} {site.address.postalCode}.
+      </p>
+    </Section>
+
+    <Section title="Working with us">
+      <p>
+        For employer and institution partnerships, media or other company enquiries, email
+        <a href={`mailto:${site.email.company}`}>{site.email.company}</a>. For help with an account, use support in the app or
+        <a href={`mailto:${site.email.support}`}>{site.email.support}</a>.
+      </p>
+    </Section>
+  </div>
+
+  <div class="page-photo">
+    <Photo name="lusaka-city" sizes="(max-width: 860px) 100vw, 760px" />
+  </div>
+</PageLayout>

@@ -1,0 +1,134 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Breadcrumbs from '@/components/Breadcrumbs.astro';
+import Photo from '@/components/Photo.astro';
+import Arrow from '@/components/Arrow.astro';
+import StoreBadge from '@/components/StoreBadge.astro';
+import { formatDate, site } from '@/data/site';
+
+export async function getStaticPaths() {
+  const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+    (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+  );
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: {
+      post,
+      related: posts.filter((other) => other.id !== post.id).slice(0, 3),
+    },
+  }));
+}
+
+const { post, related } = Astro.props;
+const { Content, headings } = await render(post);
+const words = (post.body ?? '').split(/\s+/).filter(Boolean).length;
+const minutes = Math.max(2, Math.round(words / 220));
+
+const published = post.data.publishedAt.toISOString();
+const modified = (post.data.updatedAt ?? post.data.publishedAt).toISOString();
+const path = `/blog/${post.id}/`;
+const url = `${site.url}${path}`;
+
+const breadcrumbs = [
+  { name: 'Home', href: '/' },
+  { name: 'Blog', href: '/blog/' },
+  { name: post.data.title, href: path },
+];
+
+const schema = [
+  {
+    '@type': 'BlogPosting',
+    '@id': `${url}#article`,
+    mainEntityOfPage: url,
+    headline: post.data.title,
+    description: post.data.summary,
+    datePublished: published,
+    dateModified: modified,
+    wordCount: words,
+    articleSection: post.data.category,
+    inLanguage: 'en-ZM',
+    author: { '@type': 'Organization', name: post.data.author, url: `${site.url}/about/` },
+    publisher: { '@id': `${site.url}/#organization` },
+    image: `${site.url}/og/blog.png`,
+  },
+];
+
+const shareText = encodeURIComponent(`${post.data.title} ${url}`);
+const toc = headings.filter((h) => h.depth === 2);
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.summary}
+  ogType="article"
+  ogImage="/og/blog.png"
+  publishedAt={published}
+  modifiedAt={modified}
+  breadcrumbs={breadcrumbs}
+  schema={schema}
+>
+  <div class="article-main">
+    <article class="article">
+      <header class="article-header">
+        <Breadcrumbs items={breadcrumbs} />
+        <p class="section-label">{post.data.category}</p>
+        <h1>{post.data.title}</h1>
+        <p class="article-summary">{post.data.summary}</p>
+        <div class="article-byline">
+          <span>By <strong>{post.data.author}</strong></span>
+          <time datetime={published.slice(0, 10)}>{formatDate(published)}</time>
+          {post.data.updatedAt && <span>Updated {formatDate(modified)}</span>}
+          <span>{minutes} min read</span>
+        </div>
+      </header>
+
+      {post.data.photo && <Photo name={post.data.photo} className="article-photo" sizes="(max-width: 860px) 100vw, 760px" eager />}
+
+      {toc.length > 3 && (
+        <nav class="note" aria-label="In this article">
+          <strong>In this article</strong>
+          <ul>
+            {toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+          </ul>
+        </nav>
+      )}
+
+      <div class="article-body">
+        <Content />
+      </div>
+
+      <div class="article-share">
+        <span class="share-label">Share</span>
+        <a href={`https://wa.me/?text=${shareText}`} rel="noopener">WhatsApp</a>
+        <a href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`} rel="noopener">Facebook</a>
+        <a href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`} rel="noopener">LinkedIn</a>
+      </div>
+    </article>
+
+    <section class="related-reading" aria-labelledby="related-title">
+      <h2 id="related-title">Keep reading</h2>
+      <ul>
+        {related.map((item) => (
+          <li>
+            <a href={`/blog/${item.id}/`}>
+              <span>{item.data.category}</span>
+              <strong>{item.data.title}</strong>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p><a class="text-link text-link-with-icon" href="/blog/"><span>All articles</span><Arrow /></a></p>
+    </section>
+  </div>
+
+  <section class="closing-band">
+    <div class="closing-inner page-width">
+      <div>
+        <p class="section-label">Dottra for Android</p>
+        <h2>See your available credit, statements and payments in one place.</h2>
+      </div>
+      <StoreBadge className="store-badge-on-dark" />
+    </div>
+  </section>
+</BaseLayout>

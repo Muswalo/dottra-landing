@@ -1,38 +1,30 @@
 {
-  "name": "site",
+  "name": "dottra-site",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=22.22.0"
+  },
   "scripts": {
-    "dev": "vite",
-    "generate:og": "bun scripts/generate-og-images.ts",
-    "generate:static": "bun scripts/generate-static-pages.ts",
-    "build": "bun run generate:static && tsc -b && vite build",
-    "build:full": "bun run generate:og && bun run build",
-    "lint": "eslint .",
-    "preview": "vite preview"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "verify": "bun scripts/verify-build.ts",
+    "images:og": "bash scripts/build-og-images.sh",
+    "images:social": "python3 scripts/build-social.py",
+    "photos:fetch": "bun scripts/fetch-photos.ts",
+    "videos": "bash scripts/build-videos.sh"
   },
   "dependencies": {
-    "react": "^19.2.6",
-    "react-dom": "^19.2.6",
-    "react-icons": "^5.6.0"
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/sitemap": "3.7.4",
+    "astro": "7.4.0",
+    "sharp": "0.35.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.29.0",
-    "@eslint/js": "^10.0.1",
-    "@rolldown/plugin-babel": "^0.2.3",
-    "@types/babel__core": "^7.20.5",
-    "@types/node": "^24.12.3",
-    "@types/react": "^19.2.14",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^6.0.1",
-    "babel-plugin-react-compiler": "^1.0.0",
-    "eslint": "^10.3.0",
-    "eslint-plugin-react-hooks": "^7.1.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.6.0",
-    "typescript": "~6.0.2",
-    "typescript-eslint": "^8.59.2",
-    "vite": "^8.0.12"
+    "@astrojs/check": "0.9.10",
+    "typescript": "6.0.2"
   }
 }

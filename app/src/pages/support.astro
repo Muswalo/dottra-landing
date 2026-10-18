@@ -1,0 +1,149 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Arrow from '@/components/Arrow.astro';
+import { kwacha, pricing, site } from '@/data/site';
+
+type Group = { title: string; items: { q: string; a: string[] }[] };
+
+const groups: Group[] = [
+  {
+    title: 'Getting started',
+    items: [
+      {
+        q: 'How long does verification take?',
+        a: ['Document reviews usually take one to two working days. The app notifies you when your documents are approved or if one needs to be uploaded again.'],
+      },
+      {
+        q: 'A document was rejected. What do I do?',
+        a: ['The app shows which document was rejected and why, such as a blurry photo or an expired document. Upload a new photo from the same screen. Most rejections are photo quality, so use good light and keep the whole document in the frame.'],
+      },
+      {
+        q: 'Is there an iPhone app?',
+        a: ['Not yet. Dottra is currently available for Android on Google Play.'],
+      },
+    ],
+  },
+  {
+    title: 'Draws',
+    items: [
+      {
+        q: 'How long does a draw take to arrive?',
+        a: ['Usually a few seconds. Occasionally a mobile money network takes longer. The app shows the status of the draw until it completes.'],
+      },
+      {
+        q: 'My draw failed. Was I charged?',
+        a: ['No. If a draw does not complete, nothing is added to your balance and no processing fee is charged. You can try again once the app shows the draw as not completed.'],
+      },
+      {
+        q: 'Why can I not draw right now?',
+        a: [
+          `The app shows the reason on the Draw screen. The common ones are: your available credit is below ${kwacha(pricing.minimumDraw)}, another draw is still processing, a statement is overdue so the facility is temporarily frozen, or your verification isn't complete yet.`,
+        ],
+      },
+      {
+        q: 'Can I send a draw to someone else\u2019s number?',
+        a: ['No. Draws only go to the mobile money number registered in your own name.'],
+      },
+    ],
+  },
+  {
+    title: 'Paying back and statements',
+    items: [
+      {
+        q: 'How do I pay?',
+        a: ['Open Pay in the app, choose an amount and approve the mobile money prompt on your phone. You can pay any day, not only on the due date.'],
+      },
+      {
+        q: 'I paid but my balance has not changed.',
+        a: ['Most payments show within a minute. If it has been longer, check that you approved the prompt from your network. If the money left your wallet and the app still does not show it after an hour, contact support with the transaction reference from your network.'],
+      },
+      {
+        q: 'Why did I not get a statement this month?',
+        a: ['Statements are only produced when you owe something at the end of the month. If your balance was zero, there is no statement and no charge.'],
+      },
+      {
+        q: 'My facility is frozen. How do I unfreeze it?',
+        a: ['A facility freezes when a statement is not paid by the end of its due date. Pay the overdue amount shown on the Pay screen and it unfreezes automatically. You can pay while it is frozen.'],
+      },
+    ],
+  },
+  {
+    title: 'Security and your account',
+    items: [
+      {
+        q: 'Someone called saying they are from Dottra and asked for my PIN.',
+        a: ['That was not us. Dottra will never ask for your PIN, password or a one-time code by phone, SMS, WhatsApp or email. Do not share it. If you already did, contact support straight away so we can secure your account.'],
+      },
+      {
+        q: 'I changed my phone number.',
+        a: ['Contact support from the email address on your account. We verify your identity before changing the number, because it is also where your money is sent.'],
+      },
+      {
+        q: 'How do I delete my account?',
+        a: ['See the account deletion page. You will need to pay any outstanding balance first.'],
+      },
+    ],
+  },
+];
+
+const schema = [
+  {
+    '@type': 'FAQPage',
+    mainEntity: groups.flatMap((g) =>
+      g.items.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: { '@type': 'Answer', text: item.a.join(' ') },
+      })),
+    ),
+  },
+];
+---
+
+<PageLayout
+  title="Help and support"
+  heading="Help with your Dottra account."
+  description="Answers to common questions about verification, draws, payments, statements and security, and how to contact Dottra support."
+  eyebrow="Help"
+  summary="Answers to the questions we get most. If yours isn't here, use support in the app. It connects your message to your account, so we can help faster."
+  ogImage="/og/support.png"
+  schema={schema}
+>
+  <div class="split">
+    <div>
+      {groups.map((group) => (
+        <div class="prose-block">
+          <h2>{group.title}</h2>
+          <div class="faq">
+            {group.items.map((item) => (
+              <details>
+                <summary>{item.q}</summary>
+                <div class="answer">{item.a.map((p) => <p>{p}</p>)}</div>
+              </details>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+    <aside>
+      <h2>Contact support</h2>
+      <dl>
+        <dt>In the app</dt>
+        <dd>Profile or Settings, then Help &amp; support</dd>
+        <dt>Email</dt>
+        <dd><a href={`mailto:${site.email.support}`}>{site.email.support}</a></dd>
+        <dt>Phone</dt>
+        <dd><a href={site.phoneHref}>{site.phone}</a></dd>
+      </dl>
+      <p class="hint">Include the email or phone number on your account. Never send your PIN, password, one-time codes or full ID documents by email.</p>
+      <ul>
+        <li><a href="/delete-account/">Delete your account</a></li>
+        <li><a href="/contact/">Other enquiries</a></li>
+      </ul>
+    </aside>
+  </div>
+
+  <div class="action-row">
+    <a class="button button-secondary" href="/pricing/"><span>Pricing questions</span><Arrow /></a>
+  </div>
+</PageLayout>

@@ -26,8 +26,11 @@ app/dist-ssr
 *.sln
 *.sw?
 
-# Unused Vite template leftovers
-app/src/App.css
-app/src/assets/hero.png
-app/src/assets/react.svg
-app/src/assets/vite.svg
+# Astro
+app/.astro
+
+# Local env (never commit real keys)
+.env
+app/.env
+.env.local
+app/.env.local

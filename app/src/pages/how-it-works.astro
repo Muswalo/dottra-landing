@@ -1,0 +1,93 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Arrow from '@/components/Arrow.astro';
+import { kwacha, percent, pricing, site } from '@/data/site';
+
+const steps = [
+  {
+    title: 'Download the app and create an account',
+    text: `Install Dottra from Google Play, sign up with your email address and phone number, and verify both with a one-time code. You'll set a PIN, and you can add fingerprint approval if your phone supports it.`,
+  },
+  {
+    title: 'Tell us how you are paid',
+    text: `Choose whether you're salaried or a government-sponsored student. Salaried customers add employer details and net pay. Students choose their university and add their student number.`,
+  },
+  {
+    title: 'Verify your identity and income',
+    text: `Take photos of your NRC (front and back) and a selfie in the app. Salaried customers upload a recent payslip; students upload a student ID and their sponsorship document. Reviews usually take one to two working days.`,
+  },
+  {
+    title: 'Get your credit limit',
+    text: `Once your documents are approved, we review affordability and set your limit. As a guide, limits go up to ${kwacha(pricing.guideLimits.salaried)} for salaried customers and ${kwacha(pricing.guideLimits.student)} for students, but yours may be lower, and not every application is approved.`,
+  },
+  {
+    title: 'Draw when you need to',
+    text: `Choose Draw, enter any amount from ${kwacha(pricing.minimumDraw)} up to your available credit, and check the review screen: the amount added to your balance, the ${percent(pricing.processingFeeRate)} processing fee, and what you'll receive. Confirm with your PIN or fingerprint. The money is usually on your mobile money within seconds.`,
+  },
+  {
+    title: 'Pay back any time',
+    text: `Choose Pay, pick an amount (at least ${kwacha(pricing.minimumPayment)}, or the full balance if less) and approve the mobile money prompt on your phone. Your available credit goes up as you pay back what you drew.`,
+  },
+  {
+    title: 'Get your monthly statement',
+    text: `At the end of each month in which you owed something, you get a statement with your draws, payments, the monthly charge and the amount due. It's due ${pricing.gracePeriodDays} days after the statement date.`,
+  },
+];
+
+const schema = [
+  {
+    '@type': 'HowTo',
+    name: 'How to get and use a Dottra credit facility',
+    description: 'From creating an account to receiving your first monthly statement.',
+    step: steps.map((step, index) => ({
+      '@type': 'HowToStep',
+      position: index + 1,
+      name: step.title,
+      text: step.text,
+    })),
+  },
+];
+---
+
+<PageLayout
+  title="How Dottra works"
+  heading="How Dottra works, step by step."
+  description="From downloading the app and verifying your identity to your first draw, paying back and your first monthly statement."
+  eyebrow="How it works"
+  summary="Setup takes a few minutes in the app, and reviews usually take one to two working days. After that, each draw takes seconds."
+  ogImage="/og/how-it-works.png"
+  schema={schema}
+>
+  <ol class="steps">
+    {steps.map((step) => (
+      <li>
+        <div>
+          <h3>{step.title}</h3>
+          <p>{step.text}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+
+  <div class="prose-block">
+    <h2>What you need before you start</h2>
+    <ul>
+      <li>A valid Zambian NRC.</li>
+      <li>An Android phone with a camera.</li>
+      <li>A mobile money wallet (MTN, Airtel or Zamtel) registered in your own name.</li>
+      <li>A recent payslip if you're employed, or your student ID and sponsorship document if you're a student.</li>
+    </ul>
+
+    <h2>If something goes wrong</h2>
+    <p>
+      If a document is rejected, the app tells you which one and why, and you can upload it again. If a draw doesn't go
+      through, nothing is added to your balance. If you need help at any step, use support in the app or email
+      <a href={`mailto:${site.email.support}`}>{site.email.support}</a>.
+    </p>
+  </div>
+
+  <div class="action-row">
+    <a class="button" href="/pricing/"><span>See what it costs</span><Arrow /></a>
+    <a class="button button-secondary" href="/eligibility/"><span>Check eligibility</span><Arrow /></a>
+  </div>
+</PageLayout>

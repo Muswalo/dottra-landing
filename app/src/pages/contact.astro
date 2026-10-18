@@ -1,0 +1,67 @@
+---
+import PageLayout from '@/layouts/PageLayout.astro';
+import Section from '@/components/Section.astro';
+import { site } from '@/data/site';
+
+const schema = [
+  {
+    '@type': 'ContactPage',
+    '@id': `${site.url}/contact/#page`,
+    url: `${site.url}/contact/`,
+    name: 'Contact Dottra',
+    about: { '@id': `${site.url}/#organization` },
+  },
+];
+---
+
+<PageLayout
+  title="Contact Dottra"
+  heading="Contact Dottra."
+  description="How to reach Dottra for account support, company and partnership enquiries, and privacy requests, plus our registered office in Lusaka."
+  eyebrow="Contact"
+  summary="Use the channel that matches your question and we'll get it to the right person."
+  ogImage="/og/contact.png"
+  schema={schema}
+>
+  <div class="content-stack">
+    <Section title="Help with your account">
+      <p>
+        Use support in the app where you can. It links your message to your account. Otherwise email
+        <a href={`mailto:${site.email.support}`}>{site.email.support}</a> or call <a href={site.phoneHref}>{site.phone}</a>.
+      </p>
+      <p>Never send your PIN, password, one-time codes or full ID documents by email.</p>
+    </Section>
+
+    <Section title="Company and partnerships">
+      <p>
+        For employers, universities, media and other company enquiries, email
+        <a href={`mailto:${site.email.company}`}>{site.email.company}</a>.
+      </p>
+    </Section>
+
+    <Section title="Privacy and your data">
+      <p>
+        For questions about your personal data, or to exercise your rights under Zambia's Data Protection Act, email our data
+        protection contact at <a href={`mailto:${site.email.privacy}`}>{site.email.privacy}</a>. Our
+        <a href="/privacy/">privacy policy</a> explains what we collect and why.
+      </p>
+    </Section>
+
+    <Section title="Complaints">
+      <p>
+        Email <a href={`mailto:${site.email.support}`}>{site.email.support}</a> with "Complaint" in the subject line and tell us
+        what happened. We'll confirm we've received it and reply with an outcome. If you're not satisfied with how we handled
+        it, you can contact the Competition and Consumer Protection Commission (CCPC).
+      </p>
+    </Section>
+
+    <Section title="Registered office">
+      <p>
+        {site.legalName}<br />
+        {site.address.street}<br />
+        {site.address.locality} {site.address.postalCode}, {site.address.countryName}<br />
+        PACRA registration number {site.pacra}
+      </p>
+    </Section>
+  </div>
+</PageLayout>
