@@ -1,27 +1,39 @@
 # Dottra
 
-> Dottra is a reusable digital credit line for eligible salaried workers and government-sponsored students in Zambia.
+> Dottra is a reusable credit facility for eligible salaried workers and government-sponsored students in Zambia. Draw to your mobile money, pay back any time, and get a monthly statement.
 
-## Product
+Dottra Lending Services Limited, Chingwere 31651, Chunga East, Lusaka, Zambia. PACRA 120251028871.
 
-- [Product overview](https://dottra.co/product/)
-- [How it works](https://dottra.co/how-it-works/)
-- [Current pricing](https://dottra.co/pricing/)
-- [Eligibility](https://dottra.co/eligibility/)
+Key facts:
+- Reusable credit facility: one credit limit, draw any amount from K10 up to available credit, paid to mobile money (MTN, Airtel, Zamtel).
+- Processing fee: 5% of each draw, minimum K1, deducted from the amount received.
+- Monthly charge: 20% of the average daily balance for the calendar month.
+- Monthly statement when a balance is owed; payment due 7 days after the statement date. No late fees; an overdue statement temporarily freezes the facility.
+- For salaried employees and government-sponsored students at supported Zambian universities. Android app on Google Play.
 
-## Company and help
+## Pages
+- [Product](https://dottra.co/product/): what the credit facility is and how it works
+- [How it works](https://dottra.co/how-it-works/): from sign-up to the first statement
+- [Pricing](https://dottra.co/pricing/): fees, the monthly charge and worked examples
+- [Eligibility](https://dottra.co/eligibility/): who can apply and what documents are needed
+- [Help](https://dottra.co/support/): common questions and how to contact support
+- [About](https://dottra.co/about/): the company
+- [Contact](https://dottra.co/contact/): support, company and privacy contacts
 
-- [About Dottra](https://dottra.co/about/)
-- [Support](https://dottra.co/support/)
-- [Contact](https://dottra.co/contact/)
-- [Terms](https://dottra.co/terms/)
-- [Privacy](https://dottra.co/privacy/)
+## Articles
+- [What to check before you use a borrowing app in Zambia](https://dottra.co/blog/before-you-use-a-borrowing-app/): Questions to ask before you sign up, the warning signs of a bad lender, and where to complain if something goes wrong.
+- [Managing money as a government-sponsored student in Zambia](https://dottra.co/blog/student-allowance-money-management/): How to plan around allowance payments, cover the gaps when they're late, and avoid ending the semester in debt.
+- [Salary advance or credit facility? How to choose when payday is too far away](https://dottra.co/blog/salary-advance-vs-credit-facility/): How a salary advance from your employer compares with a reusable credit facility on cost, speed, privacy and what you can use it for.
+- [Mobile money in Zambia: MTN MoMo, Airtel Money and Zamtel compared](https://dottra.co/blog/mobile-money-in-zambia/): How mobile money wallets work in Zambia, what to check on fees and limits, and how to keep your wallet and PIN safe.
+- [How the Dottra credit facility works, from your first draw to your first statement](https://dottra.co/blog/introducing-dottra/): What happens when you draw, how the processing fee and monthly charge are worked out, and what a monthly statement shows.
+- [How to get out of debt when you owe more than one person](https://dottra.co/blog/how-to-get-out-of-debt/): List everything you owe, protect the essentials, choose an order to pay things off, and stop new borrowing from undoing the progress.
+- [A monthly budget you can actually keep on a Zambian salary](https://dottra.co/blog/a-monthly-budget-you-can-keep/): Start from your net pay, take out what can't move, and give everything else a job before payday instead of after.
+- [Planning for the costs that come once a year in Zambia](https://dottra.co/blog/plan-for-annual-expenses/): School terms, January uniforms, road tax, December. How to turn the big yearly costs into a small monthly amount so they stop arriving as emergencies.
+- [How to build an emergency fund when your salary barely covers the month](https://dottra.co/blog/build-an-emergency-fund/): Where to keep it, how much to aim for first, and how to start when there's nothing left over at the end of the month.
+- [How to use a credit facility without falling behind](https://dottra.co/blog/use-a-credit-line-with-a-plan/): A credit limit is not money you have. Four habits that keep a reusable facility useful instead of becoming a balance you carry every month.
 
-## Blog
-
-- [Introducing Dottra: your reusable credit line.](https://dottra.co/blog/introducing-dottra/): Why we built Dottra, how the reusable credit cycle works, and what customers can expect from the app.
-- [How to get out of debt: a practical plan.](https://dottra.co/blog/how-to-get-out-of-debt/): A clear way to list what you owe, protect essential costs, choose a repayment method, and measure progress.
-- [A monthly budget you can actually keep.](https://dottra.co/blog/a-monthly-budget-you-can-keep/): Build a simple salary-cycle budget around essentials, commitments, future costs, and flexible spending.
-- [Build an emergency fund one salary cycle at a time.](https://dottra.co/blog/build-an-emergency-fund/): Start with a small target, automate the habit, and keep emergency money separate from everyday spending.
-- [Plan for annual expenses before they arrive.](https://dottra.co/blog/plan-for-annual-expenses/): Turn school costs, renewals, travel, and celebrations into manageable monthly amounts.
-- [Use a credit line without losing sight of your budget.](https://dottra.co/blog/use-a-credit-line-with-a-plan/): Decide the purpose, complete cost, repayment source, and effect on next month before you confirm a draw.
+## Legal
+- [Terms of Service](https://dottra.co/terms/)
+- [Privacy Policy](https://dottra.co/privacy/)
+- [Cookie Policy](https://dottra.co/cookies/)
+- [Licences](https://dottra.co/licences/)
